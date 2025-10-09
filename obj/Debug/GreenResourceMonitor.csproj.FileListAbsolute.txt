@@ -1,0 +1,15 @@
+D:\AUBG\Classes\Computer Science (COS)\COS4091A_2025FA Senior Project I\GreenResourceMonitor\GreenResourceMonitor\obj\Debug\GreenResourceMonitor.csproj.AssemblyReference.cache
+D:\AUBG\Classes\Computer Science (COS)\COS4091A_2025FA Senior Project I\GreenResourceMonitor\GreenResourceMonitor\obj\Debug\MainWindow.g.cs
+D:\AUBG\Classes\Computer Science (COS)\COS4091A_2025FA Senior Project I\GreenResourceMonitor\GreenResourceMonitor\obj\Debug\App.g.cs
+D:\AUBG\Classes\Computer Science (COS)\COS4091A_2025FA Senior Project I\GreenResourceMonitor\GreenResourceMonitor\obj\Debug\GreenResourceMonitor_MarkupCompile.cache
+D:\AUBG\Classes\Computer Science (COS)\COS4091A_2025FA Senior Project I\GreenResourceMonitor\GreenResourceMonitor\obj\Debug\GreenResourceMonitor_MarkupCompile.lref
+D:\AUBG\Classes\Computer Science (COS)\COS4091A_2025FA Senior Project I\GreenResourceMonitor\GreenResourceMonitor\bin\Debug\GreenResourceMonitor.exe.config
+D:\AUBG\Classes\Computer Science (COS)\COS4091A_2025FA Senior Project I\GreenResourceMonitor\GreenResourceMonitor\bin\Debug\GreenResourceMonitor.exe
+D:\AUBG\Classes\Computer Science (COS)\COS4091A_2025FA Senior Project I\GreenResourceMonitor\GreenResourceMonitor\bin\Debug\GreenResourceMonitor.pdb
+D:\AUBG\Classes\Computer Science (COS)\COS4091A_2025FA Senior Project I\GreenResourceMonitor\GreenResourceMonitor\obj\Debug\MainWindow.baml
+D:\AUBG\Classes\Computer Science (COS)\COS4091A_2025FA Senior Project I\GreenResourceMonitor\GreenResourceMonitor\obj\Debug\GreenResourceMonitor.g.resources
+D:\AUBG\Classes\Computer Science (COS)\COS4091A_2025FA Senior Project I\GreenResourceMonitor\GreenResourceMonitor\obj\Debug\GreenResourceMonitor.Properties.Resources.resources
+D:\AUBG\Classes\Computer Science (COS)\COS4091A_2025FA Senior Project I\GreenResourceMonitor\GreenResourceMonitor\obj\Debug\GreenResourceMonitor.csproj.GenerateResource.cache
+D:\AUBG\Classes\Computer Science (COS)\COS4091A_2025FA Senior Project I\GreenResourceMonitor\GreenResourceMonitor\obj\Debug\GreenResourceMonitor.csproj.CoreCompileInputs.cache
+D:\AUBG\Classes\Computer Science (COS)\COS4091A_2025FA Senior Project I\GreenResourceMonitor\GreenResourceMonitor\obj\Debug\GreenResourceMonitor.exe
+D:\AUBG\Classes\Computer Science (COS)\COS4091A_2025FA Senior Project I\GreenResourceMonitor\GreenResourceMonitor\obj\Debug\GreenResourceMonitor.pdb
