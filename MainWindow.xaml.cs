@@ -28,6 +28,9 @@ namespace GreenResourceMonitor
 		private IProcessCollector collector;
 		private CancellationTokenSource cancellation;
 
+		private double sessionTotalEnergyWh = 0;
+		private double sessionTotalCO2Grams = 0;
+
 		public MainWindow()
 		{
 			InitializeComponent();
@@ -55,6 +58,7 @@ namespace GreenResourceMonitor
 			StopButton.IsEnabled = false;
 			StartButton.IsEnabled = false; // disable both while stopping
 			_vm.Status = "Stopping";
+			StartButton.IsEnabled = true; // re-enable start after stopped
 
 			if (collector != null)
 			{
@@ -75,6 +79,12 @@ namespace GreenResourceMonitor
 				_vm.Snapshots.Clear();
 				foreach (var snap in snapshot.OrderByDescending(s => s.CpuPercent)) 
 					_vm.Snapshots.Add(snap);
+
+				sessionTotalEnergyWh += snapshot.Sum(s => s.EnergyWh);
+				sessionTotalCO2Grams += snapshot.Sum(s => s.CO2Grams);
+
+				TotalEnergyLabel.Content = $"Total Energy at the time: {sessionTotalEnergyWh:F4} Wh";
+				TotalCO2Label.Content = $"Total CO₂ at the time: {sessionTotalCO2Grams:F3} g";
 			});
 		}
 	}

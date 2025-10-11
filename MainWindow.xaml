@@ -10,6 +10,8 @@
         <StackPanel>
             <Button Name="StartButton" Content="Start" Width="100" Height="41" Margin="-628,4,8,0" Click="StartButton_Click"/>
             <Button Name="StopButton" Content="Stop" Width="100" Height="41" Margin="-400,-41,8,0" Click = "StopButton_Click" />
+            <Label Name="TotalEnergyLabel" Content="Total Energy at the time: 0 Wh" Width="170" Margin="228,-40,8,0"/>
+            <Label Name="TotalCO2Label" Content="Total CO₂ at the time: 0 g" Width="170" Margin="600,-40,8,0"/>
         </StackPanel>
 
         <DataGrid x:Name="ProcessesGrid" Margin="8,48,8,8"
@@ -19,6 +21,10 @@
                 <DataGridTextColumn Header="Process" Binding="{Binding ProcessName}" Width="*"/>
                 <DataGridTextColumn Header="CPU %" Binding="{Binding CpuPercent}" Width="80"/>
                 <DataGridTextColumn Header="Memory" Binding="{Binding WorkingSetReadable}" Width="120"/>
+                <DataGridTextColumn Header="Energy (Wh)" Binding="{Binding EnergyWh, StringFormat=F6}" Width="110"/>
+                <DataGridTextColumn Header="CO₂ (g)" Binding="{Binding CO2Grams, StringFormat=F3}" Width="90"/>
+                <DataGridTextColumn Header="Cost ($)" Binding="{Binding CostUSD, StringFormat=F5}" Width="90"/>
+
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

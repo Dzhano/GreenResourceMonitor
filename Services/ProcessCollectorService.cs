@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace GreenResourceMonitor.Services
 {
-	public class ProcessCollectorService : IProcessCollector
+	internal class ProcessCollectorService : IProcessCollector
 	{
 		private readonly TimeSpan interval;
 		private readonly Dictionary<int, TimeSpan> lastCpuTimes = new Dictionary<int, TimeSpan>();
@@ -30,7 +30,7 @@ namespace GreenResourceMonitor.Services
 			{
 				var dir = Path.GetDirectoryName(this.csvPath);
 				if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
-				if (!File.Exists(this.csvPath)) File.AppendAllText(this.csvPath, "utc_timestamp,pid,process_name,cpu_percent,working_set_bytes\r\n", Encoding.UTF8);
+				if (!File.Exists(this.csvPath)) File.AppendAllText(this.csvPath, "utc_timestamp,pid,Process_Name,CPU_percent,Working_set_bytes,Energy_Wh,CO2_Grams,Cost_USD\r\n", Encoding.UTF8);
 			}
 		}
 
@@ -93,6 +93,12 @@ namespace GreenResourceMonitor.Services
 					var cpuPercent = (interval.TotalMilliseconds > 0) ? (deltaMs / interval.TotalMilliseconds) / _logicalProcessors * 100.0 : 0.0; // CPU usage percentage
 					lastCpuTimes[pID] = cpuTime; // Update last recorded CPU time
 
+					const double cpuTDPWatts = 15.0; // Average TDP for a CPU core in Watts (assumed)
+					const double intervalSeconds = 1.0; // Interval in seconds (assumed to be 1 second for simplicity)
+					const double co2PerWh = 0.475; // Average CO2 emissions per Wh in grams in Bulgaria = 0.475 kg or 475 grams
+					const double costPerKWhUSD_BG = 0.15; // Average cost of electricity per kWh in Bulgaria = 0.15 USD or 15 cents
+					double energyWh = (cpuPercent / 100.0) * cpuTDPWatts * (intervalSeconds / 3600.0); // Energy in Watt-hours
+
 					// Create snapshot for this process and add to result list
 					var snapshot = new ProcessSnapshot
 					{
@@ -100,14 +106,17 @@ namespace GreenResourceMonitor.Services
 						Pid = pID,
 						ProcessName = pName,
 						CpuPercent = Math.Round(cpuPercent, 3),
-						WorkingSetBytes = process.WorkingSet64
+						WorkingSetBytes = process.WorkingSet64,
+						EnergyWh = Math.Round(energyWh, 6), // Energy in Watt-hours
+						CO2Grams = Math.Round(energyWh * co2PerWh, 6), // CO2 emissions in grams
+						CostUSD = Math.Round(energyWh * (costPerKWhUSD_BG / 1000.0), 6) // Cost in USD
 					};
 					result.Add(snapshot);
 
 					if (!string.IsNullOrEmpty(csvPath))
 					{
-						var csvLine = string.Format(CultureInfo.InvariantCulture, $"{now:O},{pID},{pName},{snapshot.CpuPercent},{snapshot.WorkingSetBytes}");
-						System.IO.File.AppendAllLines(csvPath, new[] { csvLine }, Encoding.UTF8);
+						var csvLine = string.Format(CultureInfo.InvariantCulture, $"{now:O},{pID},{pName},{snapshot.CpuPercent},{snapshot.WorkingSetBytes}, {snapshot.EnergyWh}, {snapshot.CO2Grams}, {snapshot.CostUSD}");
+						File.AppendAllLines(csvPath, new[] { csvLine }, Encoding.UTF8);
 					}
 				}
 				catch { }
