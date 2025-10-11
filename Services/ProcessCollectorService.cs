@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace GreenResourceMonitor.Services
 {
-	internal class ProcessCollectorService : IProcessCollector
+	public class ProcessCollectorService : IProcessCollector
 	{
 		private readonly TimeSpan interval;
 		private readonly Dictionary<int, TimeSpan> lastCpuTimes = new Dictionary<int, TimeSpan>();
@@ -97,16 +97,16 @@ namespace GreenResourceMonitor.Services
 					var snapshot = new ProcessSnapshot
 					{
 						UtcTimestamp = now,
-						ProcessId = pID,
+						Pid = pID,
 						ProcessName = pName,
-						CpuUsagePercent = Math.Round(cpuPercent, 3),
+						CpuPercent = Math.Round(cpuPercent, 3),
 						WorkingSetBytes = process.WorkingSet64
 					};
 					result.Add(snapshot);
 
 					if (!string.IsNullOrEmpty(csvPath))
 					{
-						var csvLine = string.Format(CultureInfo.InvariantCulture, $"{now:O},{pID},{pName},{snapshot.CpuUsagePercent},{snapshot.WorkingSetBytes}");
+						var csvLine = string.Format(CultureInfo.InvariantCulture, $"{now:O},{pID},{pName},{snapshot.CpuPercent},{snapshot.WorkingSetBytes}");
 						System.IO.File.AppendAllLines(csvPath, new[] { csvLine }, Encoding.UTF8);
 					}
 				}

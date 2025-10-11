@@ -34,8 +34,6 @@ namespace GreenResourceMonitor
 			DataContext = _vm;
 			ProcessesGrid.ItemsSource = _vm.Snapshots;
 
-			StartButton.Click += StartButton_Click;
-			StopButton.Click += StopButton_Click;
 			StopButton.IsEnabled = false;
 
 		}
@@ -75,7 +73,7 @@ namespace GreenResourceMonitor
 			Dispatcher.Invoke(() =>
 			{
 				_vm.Snapshots.Clear();
-				foreach (var snap in snapshot.OrderByDescending(s => s.CpuUsagePercent)) 
+				foreach (var snap in snapshot.OrderByDescending(s => s.CpuPercent)) 
 					_vm.Snapshots.Add(snap);
 			});
 		}
