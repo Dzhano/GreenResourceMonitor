@@ -20,7 +20,7 @@ namespace GreenResourceMonitor.Services
 		private CancellationTokenSource cts;
 		private readonly string csvPath;
 
-		public event Action<IEnumerable<Models.ProcessSnapshot>> OnProcessSnapshot;
+		public event Action<IEnumerable<ProcessSnapshot>> OnProcessSnapshot; // Event to emit collected process snapshots
 
 		public ProcessCollectorService(TimeSpan? interval = null, string csvPath = null)
 		{
@@ -75,8 +75,8 @@ namespace GreenResourceMonitor.Services
 		private void SampleAndEmit()
 		{
 			DateTime now = DateTime.UtcNow;
-			var processes = System.Diagnostics.Process.GetProcesses();
-			var result = new List<ProcessSnapshot>(processes.Length);
+			var processes = Process.GetProcesses(); // Get all running processes
+			var result = new List<ProcessSnapshot>(processes.Length); // Prepare result list
 
 			foreach (var process in processes)
 			{
@@ -115,17 +115,18 @@ namespace GreenResourceMonitor.Services
 
 					if (!string.IsNullOrEmpty(csvPath))
 					{
+						// Append snapshot to CSV file
 						var csvLine = string.Format(CultureInfo.InvariantCulture, $"{now:O},{pID},{pName},{snapshot.CpuPercent},{snapshot.WorkingSetBytes}, {snapshot.EnergyWh}, {snapshot.CO2Grams}, {snapshot.CostUSD}");
 						File.AppendAllLines(csvPath, new[] { csvLine }, Encoding.UTF8);
 					}
 				}
 				catch { }
 			}
-			var active = processes.Select(p => p.Id).ToHashSet();
-			var removed = lastCpuTimes.Keys.Where(id => !active.Contains(id)).ToList();
-			foreach (var id in removed) lastCpuTimes.Remove(id);
+			var active = processes.Select(p => p.Id).ToHashSet(); // Get current active process IDs
+			var removed = lastCpuTimes.Keys.Where(id => !active.Contains(id)).ToList(); // Find removed processes
+			foreach (var id in removed) lastCpuTimes.Remove(id); // Clean up removed processes
 
-			OnProcessSnapshot?.Invoke(result);
+			OnProcessSnapshot?.Invoke(result); // Emit the collected snapshots
 		}
 
 		public void Dispose() => _ = StopAsync();

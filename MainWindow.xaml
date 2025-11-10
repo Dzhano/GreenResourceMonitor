@@ -5,17 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GreenResourceMonitor"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="465" Width="800">
     <Grid>
-        <StackPanel>
-            <Button Name="StartButton" Content="Start" Width="100" Height="41" Margin="-628,4,8,0" Click="StartButton_Click"/>
-            <Button Name="StopButton" Content="Stop" Width="100" Height="41" Margin="-400,-41,8,0" Click = "StopButton_Click" />
-            <Label Name="TotalEnergyLabel" Content="Total Energy at the time: 0 Wh" Width="170" Margin="228,-40,8,0"/>
-            <Label Name="TotalCO2Label" Content="Total CO₂ at the time: 0 g" Width="170" Margin="600,-40,8,0"/>
+        <StackPanel Orientation="Horizontal" Margin="0,0,0,379" VerticalAlignment="Top">
+            <Button Name="StartButton" Content="Start" Width="100" Height="41" Margin="7,0,8,0" Click="StartButton_Click"/>
+            <Button Name="StopButton" Content="Stop" Width="100" Height="41" Margin="0,0,8,0" Click = "StopButton_Click" />
+            <Label Name="TotalEnergyLabel" Content="Total Energy at the time: 0 Wh" Width="170" Margin="160,4,8,0" Height="34"/>
+            <Label Name="TotalCO2Label" Content="Total CO₂ at the time: 0 g" Width="170" Margin="0,4,8,0" Height="34"/>
         </StackPanel>
 
-        <DataGrid x:Name="ProcessesGrid" Margin="8,48,8,8"
-            AutoGenerateColumns="False" IsReadOnly="True">
+        <DataGrid x:Name="ProcessesGrid" Margin="8,48,8,8" AutoGenerateColumns="False" IsReadOnly="True">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="PID" Binding="{Binding Pid}" Width="60"/>
                 <DataGridTextColumn Header="Process" Binding="{Binding ProcessName}" Width="*"/>
