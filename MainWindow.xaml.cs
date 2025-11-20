@@ -72,16 +72,16 @@ namespace GreenResourceMonitor
 		}
 
 
-		private void Collector_OnProcessSnapshot(IEnumerable<ProcessSnapshot> snapshots)
+		private void Collector_OnProcessSnapshot(IEnumerable<ProcessSnapshot> snapshot)
 		{
 			Dispatcher.Invoke(() =>
 			{
 				_vm.Snapshots.Clear();
-				foreach (var snap in snapshots.OrderByDescending(s => s.CpuPercent)) 
+				foreach (var snap in snapshot.OrderByDescending(s => s.CpuPercent)) 
 					_vm.Snapshots.Add(snap);
 
-				sessionTotalEnergyWh += snapshots.Sum(s => s.EnergyWh);
-				sessionTotalCO2Grams += snapshots.Sum(s => s.CO2Grams);
+				sessionTotalEnergyWh += snapshot.Sum(s => s.EnergyWh);
+				sessionTotalCO2Grams += snapshot.Sum(s => s.CO2Grams);
 
 				TotalEnergyLabel.Content = $"Total Energy at the time: {sessionTotalEnergyWh:F4} Wh";
 				TotalCO2Label.Content = $"Total CO₂ at the time: {sessionTotalCO2Grams:F3} g";
