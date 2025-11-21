@@ -19,13 +19,15 @@ namespace GreenResourceMonitor.Services
 		private Task loop;
 		private CancellationTokenSource cts;
 		private readonly string csvPath;
+		private readonly AppSettings appSettings;
 
-		public event Action<IEnumerable<Models.ProcessSnapshot>> OnProcessSnapshot;
+		public event Action<IEnumerable<ProcessSnapshot>> OnProcessSnapshot;
 
-		public ProcessCollectorService(TimeSpan? interval = null, string csvPath = null)
+		public ProcessCollectorService(TimeSpan? interval = null, string csvPath = null, AppSettings settings = null)
 		{
 			this.interval = interval ?? TimeSpan.FromSeconds(1);
 			this.csvPath = csvPath;
+			appSettings = settings ?? new AppSettings();
 			if (!string.IsNullOrEmpty(this.csvPath))
 			{
 				var dir = Path.GetDirectoryName(this.csvPath);
@@ -75,7 +77,7 @@ namespace GreenResourceMonitor.Services
 		private void SampleAndEmit()
 		{
 			DateTime now = DateTime.UtcNow;
-			var processes = System.Diagnostics.Process.GetProcesses();
+			var processes = Process.GetProcesses();
 			var result = new List<ProcessSnapshot>(processes.Length);
 
 			foreach (var process in processes)
@@ -94,10 +96,11 @@ namespace GreenResourceMonitor.Services
 					lastCpuTimes[pID] = cpuTime; // Update last recorded CPU time
 
 					const double cpuTDPWatts = 15.0; // Average TDP for a CPU core in Watts (assumed)
-					const double intervalSeconds = 1.0; // Interval in seconds (assumed to be 1 second for simplicity)
-					const double co2PerWh = 0.475; // Average CO2 emissions per Wh in grams in Bulgaria = 0.475 kg or 475 grams
-					const double costPerKWhUSD_BG = 0.15; // Average cost of electricity per kWh in Bulgaria = 0.15 USD or 15 cents
+					double intervalSeconds = interval.TotalSeconds; // Actual interval in seconds
+					double co2PerWh = appSettings.Co2PerWh; // Average CO2 emissions per Wh in grams in Bulgaria = 0.475 kg or 475 grams
+					double costPerKWhUSD_BG = appSettings.CostPerKWhUSD; // Average cost of electricity per kWh in Bulgaria = 0.15 USD or 15 cents
 					double energyWh = (cpuPercent / 100.0) * cpuTDPWatts * (intervalSeconds / 3600.0); // Energy in Watt-hours
+					double calibrationFactor = appSettings.CalibrationFactor; // Calibration factor to adjust energy estimates
 
 					// Create snapshot for this process and add to result list
 					var snapshot = new ProcessSnapshot
@@ -109,7 +112,7 @@ namespace GreenResourceMonitor.Services
 						WorkingSetBytes = process.WorkingSet64,
 						EnergyWh = Math.Round(energyWh, 6), // Energy in Watt-hours
 						CO2Grams = Math.Round(energyWh * co2PerWh, 6), // CO2 emissions in grams
-						CostUSD = Math.Round(energyWh * (costPerKWhUSD_BG / 1000.0), 6) // Cost in USD
+						CostUSD = Math.Round(energyWh * (costPerKWhUSD_BG / 1000.0) * calibrationFactor, 12) // Cost in USD
 					};
 					result.Add(snapshot);
 

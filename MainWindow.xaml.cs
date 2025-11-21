@@ -31,6 +31,9 @@ namespace GreenResourceMonitor
 		private double sessionTotalEnergyWh = 0;
 		private double sessionTotalCO2Grams = 0;
 
+		private SettingsService settingsService;
+		private AppSettings appSettings;
+
 		public MainWindow()
 		{
 			InitializeComponent();
@@ -39,6 +42,8 @@ namespace GreenResourceMonitor
 
 			StopButton.IsEnabled = false;
 
+			settingsService = new SettingsService();
+			appSettings = settingsService.Load();
 		}
 
 		private async void StartButton_Click(object sender, RoutedEventArgs e)
@@ -48,7 +53,7 @@ namespace GreenResourceMonitor
 			_vm.Status = "Running";
 
 			cancellation = new CancellationTokenSource();
-			collector = new ProcessCollectorService(TimeSpan.FromSeconds(1), System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "logs", "snapshots.csv"));
+			collector = new ProcessCollectorService(TimeSpan.FromSeconds(appSettings.SamplingSeconds), System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "logs", "snapshots.csv"), appSettings);
 			collector.OnProcessSnapshot += Collector_OnProcessSnapshot;
 			await collector.StartAsync(cancellation.Token);
 		}
@@ -87,5 +92,17 @@ namespace GreenResourceMonitor
 				TotalCO2Label.Content = $"Total CO₂ at the time: {sessionTotalCO2Grams:F3} g";
 			});
 		}
-	}
+
+		private void SettingsButton_Click(object sender, RoutedEventArgs e)
+		{
+			var settingsWindow = new SettingsWindow();
+			if (settingsWindow.ShowDialog() == true)
+			{
+				appSettings = settingsWindow.UpdatedSettings;
+				MessageBox.Show("Settings updated.", "Settings", MessageBoxButton.OK);
+
+				settingsService.Save(appSettings);
+			}
+		}
+    }
 }

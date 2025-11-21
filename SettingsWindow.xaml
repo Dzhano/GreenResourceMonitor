@@ -1,0 +1,26 @@
+﻿<Window x:Class="GreenResourceMonitor.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GreenResourceMonitor"
+        mc:Ignorable="d"
+        Title="Settings" Height="450" Width="800">
+    <Grid>
+        <TextBlock HorizontalAlignment="Left" Margin="191,63,0,0" TextWrapping="Wrap" Text="Electricity Price (USD/kWh):" VerticalAlignment="Top"/>
+        <TextBox x:Name="PriceBox" HorizontalAlignment="Left" Margin="400,61,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120"/>
+        
+        <TextBlock HorizontalAlignment="Left" Margin="191,111,0,0" TextWrapping="Wrap" Text="CO₂ Intensity (g/kWh):" VerticalAlignment="Top"/>
+        <TextBox x:Name="CO2Box" HorizontalAlignment="Left" Margin="400,109,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120"/>
+        
+        <TextBlock HorizontalAlignment="Left" Margin="191,171,0,0" TextWrapping="Wrap" Text="Sampling Interval (s):" VerticalAlignment="Top"/>
+        <TextBox x:Name="IntervalBox" HorizontalAlignment="Left" Margin="400,169,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120"/>
+        
+        <TextBlock HorizontalAlignment="Left" Margin="191,219,0,0" TextWrapping="Wrap" Text="Calibration Factor:" VerticalAlignment="Top"/>
+        <TextBox x:Name="CalibBox" HorizontalAlignment="Left" Margin="400,217,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120"/>
+        
+        <Button Content="Save" HorizontalAlignment="Center" Margin="0,336,0,0" VerticalAlignment="Top" Width="80" Click="Save_Click"/>
+        <Button Content="Cancel" HorizontalAlignment="Left" Margin="479,336,0,0" VerticalAlignment="Top" Width="80" Click="Cancel_Click"/>
+
+    </Grid>
+</Window>
