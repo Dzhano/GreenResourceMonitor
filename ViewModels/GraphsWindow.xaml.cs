@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace GreenResourceMonitor.ViewModels
 {
@@ -15,18 +17,30 @@ namespace GreenResourceMonitor.ViewModels
 		private readonly string csvPath;
 		private List<ProcessSnapshot> points = new List<ProcessSnapshot>();
 
+		private readonly Dictionary<string, Func<ProcessSnapshot, double>> metricSelectors =
+			new Dictionary<string, Func<ProcessSnapshot, double>>()
+		{
+			{"CPU (%)", p => p.CpuPercent },
+			{"Memory (Bytes)", p => (double)p.WorkingSetBytes }, // Convert long to double for plotting
+            {"Energy (Wh)", p => p.EnergyWh },
+			{"CO2 (g)", p => p.CO2Grams },
+			{"Cost (USD)", p => p.CostUSD }
+		};
+
 		public GraphsWindow(string csvPath)
 		{
 			InitializeComponent();
 			this.csvPath = csvPath;
 
-			PlotView.Plot.Title("Energy Consumption Over Time");
+			PlotView.Plot.Title("Energy (Wh) over time");
 			PlotView.Plot.Axes.Bottom.Label.Text = "Time";
 			PlotView.Plot.Axes.Left.Label.Text = "Energy (Wh)";
 
 			LoadCsv();
 			PopulateProcessList();
-			PlotData("All");
+			MetricCombo.ItemsSource = metricSelectors.Keys.ToList();
+			MetricCombo.SelectedIndex = 2;
+			PlotData("All", "Energy (Wh)");
 		}
 
 		private void LoadCsv()
@@ -77,16 +91,17 @@ namespace GreenResourceMonitor.ViewModels
 
 			ProcessCombo.Items.Clear();
 			ProcessCombo.Items.Add("All");
-			foreach (var n in names)
+			foreach (string n in names)
 				ProcessCombo.Items.Add(n);
 
 			ProcessCombo.SelectedIndex = 0;
 		}
 
-		private void PlotData(string process)
+		private void PlotData(string process, string metrics)
 		{
 			PlotView.Plot.Clear();
-
+			PlotView.Plot.Title($"{metrics} over time");
+			PlotView.Plot.Axes.Left.Label.Text = metrics;
 			if (points.Count == 0) return;
 
 			if (process == "All")
@@ -97,17 +112,34 @@ namespace GreenResourceMonitor.ViewModels
 					.OrderBy(g => g.Key)
 					.Select(g => new {
 						Time = g.Key.ToOADate(),
-						TotalEnergy = g.Sum(p => p.EnergyWh)
+						TotalMetrics = g.Sum(metricSelectors[metrics])
 					})
 					.ToList();
 
 				if (groupedData.Count > 0)
 				{
 					double[] xs = groupedData.Select(d => d.Time).ToArray();
-					double[] ys = groupedData.Select(d => d.TotalEnergy).ToArray();
+					double[] ys = groupedData.Select(d => d.TotalMetrics).ToArray();
 
 					var scatter = PlotView.Plot.Add.Scatter(xs, ys); // Add Scatter Plot
-					scatter.LegendText = "Total Energy (Wh)";
+					switch (metrics)
+					{
+						case "CPU (%)":
+							scatter.LegendText = "Total CPU (%)";
+							break;
+						case "Memory (Bytes)":
+							scatter.LegendText = "Total Memory (Bytes)";
+							break;
+						case "Energy (Wh)":
+							scatter.LegendText = "Total Energy (Wh)";
+							break;
+						case "CO2 (g)":
+							scatter.LegendText = "Total CO2 (g)";
+							break;
+						case "Cost (USD)":
+							scatter.LegendText = "Total Cost (USD)";
+							break;
+					}
 					scatter.LineWidth = 2;
 					scatter.Color = ScottPlot.Colors.Blue;
 				}
@@ -121,14 +153,14 @@ namespace GreenResourceMonitor.ViewModels
 					.OrderBy(g => g.Key)
 					.Select(g => new {
 						Time = g.Key.ToOADate(),
-						Energy = g.Sum(x => x.EnergyWh)
+						Metric = g.Sum(metricSelectors[metrics])
 					})
 					.ToList();
 
 				if (data.Count > 0)
 				{
 					double[] xs = data.Select(d => d.Time).ToArray();
-					double[] ys = data.Select(d => d.Energy).ToArray();
+					double[] ys = data.Select(d => d.Metric).ToArray();
 
 					var scatter = PlotView.Plot.Add.Scatter(xs, ys); // Add Scatter Plot
 					scatter.LegendText = process;
@@ -144,15 +176,26 @@ namespace GreenResourceMonitor.ViewModels
 		private void Refresh_Click(object sender, RoutedEventArgs e)
 		{
 			LoadCsv();
+			int processIndex = ProcessCombo.SelectedIndex;
 			PopulateProcessList();
+			ProcessCombo.SelectedIndex = processIndex >= 0 ? processIndex : 0;
 			if (ProcessCombo.SelectedItem != null)
-				PlotData(ProcessCombo.SelectedItem.ToString());
+				PlotData(ProcessCombo.SelectedItem.ToString(), MetricCombo.SelectedItem.ToString());
 		}
 
-		private void ProcessCombo_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+		private void ProcessCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			if (ProcessCombo.SelectedItem != null)
-				PlotData(ProcessCombo.SelectedItem.ToString());
+			{
+				if (MetricCombo.SelectedItem == null) PlotData(ProcessCombo.SelectedItem.ToString(), "Energy (Wh)");
+				else PlotData(ProcessCombo.SelectedItem.ToString(), MetricCombo.SelectedItem.ToString());
+			}
+		}
+
+		private void MetricCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			if (MetricCombo.SelectedItem != null)
+				PlotData(ProcessCombo.SelectedItem.ToString(), MetricCombo.SelectedItem.ToString());
 		}
 	}
 }

@@ -18,6 +18,8 @@
             <TextBlock Text="Process:" VerticalAlignment="Center"/>
             <ComboBox x:Name="ProcessCombo" Width="250" Margin="10 0"
                       SelectionChanged="ProcessCombo_SelectionChanged"/>
+            <TextBlock Text="Metric:" VerticalAlignment="Center" Margin="20,0,5,0"/>
+            <ComboBox x:Name="MetricCombo" Width="150" SelectionChanged="MetricCombo_SelectionChanged"/>
             <Button Content="Refresh" Width="80" Click="Refresh_Click"/>
         </StackPanel>
         
