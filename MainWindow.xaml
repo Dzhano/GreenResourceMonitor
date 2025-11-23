@@ -13,6 +13,8 @@
             <Label x:Name="TotalEnergyLabel" Content="Total Energy at the time: 0 Wh" Width="210" Height="34"/>
             <Label x:Name="TotalCO2Label" Content="Total CO₂ at the time: 0 g" Width="170" Height="34"/>
             <Button x:Name="SettingsButton" Content="Settings" Width="100" Height="41" Click="SettingsButton_Click" />
+            <Button Content="Graphs" Width="80" Click="GraphsButton_Click"/>
+
         </StackPanel>
 
         <DataGrid x:Name="ProcessesGrid" Margin="8,48,8,8" AutoGenerateColumns="False" IsReadOnly="True">
@@ -24,7 +26,6 @@
                 <DataGridTextColumn Header="Energy (Wh)" Binding="{Binding EnergyWh, StringFormat=F6}" Width="110"/>
                 <DataGridTextColumn Header="CO₂ (g)" Binding="{Binding CO2Grams, StringFormat=F3}" Width="90"/>
                 <DataGridTextColumn Header="Cost ($/Wh)" Binding="{Binding CostUSD, StringFormat=F12}" Width="120"/>
-
             </DataGrid.Columns>
         </DataGrid>
     </Grid>
