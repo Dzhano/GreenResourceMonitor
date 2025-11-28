@@ -26,13 +26,6 @@
             <ComboBoxItem Content="SQLite only" Tag="SQLiteOnly" />
             <ComboBoxItem Content="Both" Tag="Both" />
         </ComboBox>
-        <Button x:Name="MigrateCsvToDbButton"
-        Content="Import CSV -> SQLite"
-        Width="142"
-        Height="28"
-        Margin="562,152,0,254"
-        HorizontalAlignment="Left"
-        Click="MigrateCsvToDbButton_Click"/>
 
     </Grid>
 </Window>

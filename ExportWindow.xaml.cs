@@ -12,10 +12,10 @@ namespace GreenResourceMonitor
 	public partial class ExportWindow : Window
 	{
 		private readonly AppSettings appSettings;
-		private readonly SQLiteService sqliteService;
+		private readonly SqlServerService sqliteService;
 		private readonly List<ProcessSnapshot> points;
 
-		public ExportWindow(AppSettings settings, SQLiteService service, List<ProcessSnapshot> data)
+		public ExportWindow(AppSettings settings, SqlServerService service, List<ProcessSnapshot> data)
 		{
 			InitializeComponent();
 			appSettings = settings;

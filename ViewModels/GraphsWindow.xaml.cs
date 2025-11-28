@@ -26,7 +26,7 @@ namespace GreenResourceMonitor.ViewModels
 		private DateTime startDate, endDate;
 
 		private readonly AppSettings appSettings;
-		private readonly SQLiteService sqliteService;
+		private readonly SqlServerService sqlServerService;
 
 		private readonly Dictionary<string, Func<ProcessSnapshot, double>> metricSelectors =
 			new Dictionary<string, Func<ProcessSnapshot, double>>()
@@ -38,7 +38,7 @@ namespace GreenResourceMonitor.ViewModels
 			{"Cost (USD)", p => p.CostUSD }
 		};
 
-		public GraphsWindow(string csvPath, AppSettings appSettings, SQLiteService sql)
+		public GraphsWindow(string csvPath, AppSettings appSettings, SqlServerService sql)
 		{
 			InitializeComponent();
 			this.csvPath = csvPath;
@@ -48,13 +48,18 @@ namespace GreenResourceMonitor.ViewModels
 			PlotView.Plot.Axes.Left.Label.Text = "Energy (Wh)";
 			
 			this.appSettings = appSettings;
-			this.sqliteService = sql;
+			this.sqlServerService = sql;
 
 			if (appSettings.StorageMode == StorageMode.CSVOnly || appSettings.StorageMode == StorageMode.Both)
 				LoadCsv();
 			if (appSettings.StorageMode == StorageMode.SQLiteOnly || appSettings.StorageMode == StorageMode.Both)
 			{
-				// var series = sql.GetProcessEnergySeries().ToList(); // Soon to be added
+				// Load from SQL Server
+				var sqlPoints = sqlServerService.GetSnapshots();
+				points.AddRange(sqlPoints); // In case of both, SQL data is appended to the CSV data
+				points = points
+					.OrderBy(p => p.UtcTimestamp) // Ensure that the new snapshots are added in the correct positions
+					.ToList();
 			}
 
 			PopulateProcessList();
@@ -95,6 +100,7 @@ namespace GreenResourceMonitor.ViewModels
 							  .OrderBy(ps => ps.UtcTimestamp) // Ensure that the snapshots are sorted by timestamp so that binary search works correctly
 															// Also important for plotting time series and keep everything in a chronological order.
 							  .ToList();
+				
 				pointsByProcess = points
 					.GroupBy(p => p.ProcessName)
 					.ToDictionary(g => g.Key, g => g.ToList());
@@ -130,6 +136,7 @@ namespace GreenResourceMonitor.ViewModels
 				MessageBox.Show($"End date cannot be earlier than Start date.");
 				StartDatePicker.SelectedDate = null;
 				EndDatePicker.SelectedDate = null;
+
 				return;
 			}
 
@@ -321,7 +328,7 @@ namespace GreenResourceMonitor.ViewModels
 
 		private void MetricCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
-			if (MetricCombo.SelectedItem != null)
+			if (MetricCombo.SelectedItem != null && ProcessCombo.SelectedItem != null)
 				PlotData(ProcessCombo.SelectedItem.ToString(), MetricCombo.SelectedItem.ToString());
 		}
 
@@ -335,24 +342,8 @@ namespace GreenResourceMonitor.ViewModels
 				MessageBox.Show("No data available for the selected filters to export.");
 				return;
 			}
-			/*if (MetricCombo.SelectedItem.ToString() != "All")
-			{
-				exportedSnapshots = exportedSnapshots
-					.Select(p => new ProcessSnapshot
-					{
-						UtcTimestamp = p.UtcTimestamp,
-						Pid = p.Pid,
-						ProcessName = p.ProcessName,
-						CpuPercent = MetricCombo.SelectedItem.ToString() == "CPU (%)" ? p.CpuPercent : 0,
-						WorkingSetBytes = MetricCombo.SelectedItem.ToString() == "Memory (Bytes)" ? p.WorkingSetBytes : 0,
-						EnergyWh = MetricCombo.SelectedItem.ToString() == "Energy (Wh)" ? p.EnergyWh : 0,
-						CO2Grams = MetricCombo.SelectedItem.ToString() == "CO2 (g)" ? p.CO2Grams : 0,
-						CostUSD = MetricCombo.SelectedItem.ToString() == "Cost (USD)" ? p.CostUSD : 0
-					})
-					.ToList();
-			}*/ // Potential usage in the future
-
-			ExportWindow exportWindow = new ExportWindow(appSettings, sqliteService, exportedSnapshots);
+			
+			ExportWindow exportWindow = new ExportWindow(appSettings, sqlServerService, exportedSnapshots);
 			exportWindow.Show();
 		}
 	}

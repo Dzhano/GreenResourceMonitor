@@ -129,9 +129,6 @@ D:\AUBG\Classes\Computer Science (COS)\COS4091A_2025FA Senior Project I\GreenRes
 D:\AUBG\Classes\Computer Science (COS)\COS4091A_2025FA Senior Project I\GreenResourceMonitor\GreenResourceMonitor\obj\Debug\GreenResourceMonitor.exe
 D:\AUBG\Classes\Computer Science (COS)\COS4091A_2025FA Senior Project I\GreenResourceMonitor\GreenResourceMonitor\obj\Debug\GreenResourceMonitor.pdb
 D:\AUBG\Classes\Computer Science (COS)\COS4091A_2025FA Senior Project I\GreenResourceMonitor\GreenResourceMonitor\obj\Debug\GreenResourceMonitor.exe.config
-D:\AUBG\Classes\Computer Science (COS)\COS4091A_2025FA Senior Project I\GreenResourceMonitor\GreenResourceMonitor\bin\Debug\Microsoft.Data.Sqlite.dll
-D:\AUBG\Classes\Computer Science (COS)\COS4091A_2025FA Senior Project I\GreenResourceMonitor\GreenResourceMonitor\bin\Debug\SQLitePCLRaw.core.dll
-D:\AUBG\Classes\Computer Science (COS)\COS4091A_2025FA Senior Project I\GreenResourceMonitor\GreenResourceMonitor\bin\Debug\Microsoft.Data.Sqlite.xml
 D:\AUBG\Classes\Computer Science (COS)\COS4091A_2025FA Senior Project I\GreenResourceMonitor\GreenResourceMonitor\obj\Debug\ExportWindow.g.cs
 D:\AUBG\Classes\Computer Science (COS)\COS4091A_2025FA Senior Project I\GreenResourceMonitor\GreenResourceMonitor\obj\Debug\ExportWindow.baml
 D:\AUBG\Classes\Computer Science (COS)\COS4091A_2025FA Senior Project I\GreenResourceMonitor\GreenResourceMonitor\bin\Debug\ClosedXML.dll

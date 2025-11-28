@@ -20,22 +20,28 @@ namespace GreenResourceMonitor.Services
 		private CancellationTokenSource cts;
 		private readonly string csvPath;
 		private readonly AppSettings appSettings;
-		private readonly SQLiteService sqlite;
+
+		private readonly SqlServerService sqlService;
+		private readonly List<ProcessSnapshot> sqlBuffer = new List<ProcessSnapshot>();
+		private readonly int batchSize = 50; // Number of snapshots to insert per batch
 
 		public event Action<IEnumerable<ProcessSnapshot>> OnProcessSnapshot;
 
-		public ProcessCollectorService(TimeSpan? interval = null, string csvPath = null, AppSettings settings = null, SQLiteService sql = null)
+		public ProcessCollectorService(TimeSpan? interval = null, string csvPath = null,
+			AppSettings settings = null, SqlServerService sql = null)
 		{
 			this.interval = interval ?? TimeSpan.FromSeconds(1);
 			this.csvPath = csvPath;
 			appSettings = settings ?? new AppSettings();
-			sqlite = sql ?? new SQLiteService(appSettings.SQLitePath);
+			sqlService = sql ?? new SqlServerService(appSettings.SQLitePath);
 
 			if (!string.IsNullOrEmpty(this.csvPath))
 			{
 				var dir = Path.GetDirectoryName(this.csvPath);
 				if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
-				if (!File.Exists(this.csvPath)) File.AppendAllText(this.csvPath, "utc_timestamp,pid,Process_Name,CPU_percent,Working_set_bytes,Energy_Wh,CO2_Grams,Cost_USD\r\n", Encoding.UTF8);
+				if (!File.Exists(this.csvPath)) 
+					File.AppendAllText(this.csvPath, "utc_timestamp,pid,Process_Name,CPU_percent," +
+						"Working_set_bytes,Energy_Wh,CO2_Grams,Cost_USD\r\n", Encoding.UTF8);
 			}
 		}
 
@@ -75,6 +81,30 @@ namespace GreenResourceMonitor.Services
 			loop = null;
 			cts.Dispose();
 			cts = null;
+
+			// Flush any remaining SQL buffer
+			if (appSettings.StorageMode == StorageMode.SQLiteOnly || appSettings.StorageMode == StorageMode.Both)
+			{
+				lock (sqlBuffer)
+				{
+					if (sqlBuffer.Count > 0)
+					{
+						var toInsert = new List<ProcessSnapshot>(sqlBuffer);
+						sqlBuffer.Clear();
+						try
+						{
+							foreach (var snapshot in toInsert)
+							{
+								sqlService.InsertSnapshot(snapshot);
+							}
+						}
+						catch (Exception ex)
+						{
+							Debug.WriteLine("SQL final insert error: " + ex.Message);
+						}
+					}
+				}
+			}
 		}
 
 		private void SampleAndEmit()
@@ -128,7 +158,31 @@ namespace GreenResourceMonitor.Services
 						}
 					}
 					if (appSettings.StorageMode == StorageMode.SQLiteOnly || appSettings.StorageMode == StorageMode.Both)
-						sqlite?.InsertSnapshot(snapshot);
+					{
+						lock (sqlBuffer)
+						{
+							sqlBuffer.Add(snapshot);
+							if (sqlBuffer.Count >= batchSize)
+							{
+								// copy and clear buffer quickly, then insert in background
+								var toInsert = new List<ProcessSnapshot>(sqlBuffer);
+								sqlBuffer.Clear();
+								// fire-and-forget background insert (don't block UI/timer)
+								_ = Task.Run(() =>
+								{
+									try
+									{
+										sqlService.InsertSnapshot(snapshot);
+									}
+									catch (Exception ex)
+									{
+										// log but don't crash
+										Debug.WriteLine("SQL insert batch error: " + ex.Message);
+									}
+								});
+							}
+						}
+					}
 				}
 				catch { }
 			}
