@@ -20,14 +20,17 @@ namespace GreenResourceMonitor.Services
 		private CancellationTokenSource cts;
 		private readonly string csvPath;
 		private readonly AppSettings appSettings;
+		private readonly SQLiteService sqlite;
 
 		public event Action<IEnumerable<ProcessSnapshot>> OnProcessSnapshot;
 
-		public ProcessCollectorService(TimeSpan? interval = null, string csvPath = null, AppSettings settings = null)
+		public ProcessCollectorService(TimeSpan? interval = null, string csvPath = null, AppSettings settings = null, SQLiteService sql = null)
 		{
 			this.interval = interval ?? TimeSpan.FromSeconds(1);
 			this.csvPath = csvPath;
 			appSettings = settings ?? new AppSettings();
+			sqlite = sql ?? new SQLiteService(appSettings.SQLitePath);
+
 			if (!string.IsNullOrEmpty(this.csvPath))
 			{
 				var dir = Path.GetDirectoryName(this.csvPath);
@@ -116,11 +119,16 @@ namespace GreenResourceMonitor.Services
 					};
 					result.Add(snapshot);
 
-					if (!string.IsNullOrEmpty(csvPath))
+					if (appSettings.StorageMode == StorageMode.CSVOnly || appSettings.StorageMode == StorageMode.Both)
 					{
-						var csvLine = string.Format(CultureInfo.InvariantCulture, $"{now:O},{pID},{pName},{snapshot.CpuPercent},{snapshot.WorkingSetBytes}, {snapshot.EnergyWh}, {snapshot.CO2Grams}, {snapshot.CostUSD}");
-						File.AppendAllLines(csvPath, new[] { csvLine }, Encoding.UTF8);
+						if (!string.IsNullOrEmpty(csvPath))
+						{
+							string csvLine = string.Format(CultureInfo.InvariantCulture, $"{now:O},{pID},{pName},{snapshot.CpuPercent},{snapshot.WorkingSetBytes}, {snapshot.EnergyWh}, {snapshot.CO2Grams}, {snapshot.CostUSD}");
+							File.AppendAllLines(csvPath, new[] { csvLine }, Encoding.UTF8);
+						}
 					}
+					if (appSettings.StorageMode == StorageMode.SQLiteOnly || appSettings.StorageMode == StorageMode.Both)
+						sqlite?.InsertSnapshot(snapshot);
 				}
 				catch { }
 			}

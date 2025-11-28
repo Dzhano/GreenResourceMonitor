@@ -23,6 +23,7 @@ namespace GreenResourceMonitor
 
 		private SettingsService settingsService;
 		private AppSettings appSettings;
+		private SQLiteService sqliteService;
 
 		public MainWindow()
 		{
@@ -34,6 +35,7 @@ namespace GreenResourceMonitor
 
 			settingsService = new SettingsService();
 			appSettings = settingsService.Load();
+			sqliteService = new SQLiteService(appSettings.SQLitePath);
 		}
 
 		private async void StartButton_Click(object sender, RoutedEventArgs e)
@@ -43,7 +45,7 @@ namespace GreenResourceMonitor
 			_vm.Status = "Running";
 
 			cancellation = new CancellationTokenSource();
-			collector = new ProcessCollectorService(TimeSpan.FromSeconds(appSettings.SamplingSeconds), System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "logs", "snapshots.csv"), appSettings);
+			collector = new ProcessCollectorService(TimeSpan.FromSeconds(appSettings.SamplingSeconds), System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "logs", "snapshots.csv"), appSettings, sqliteService);
 			collector.OnProcessSnapshot += Collector_OnProcessSnapshot;
 			await collector.StartAsync(cancellation.Token);
 		}
@@ -98,9 +100,8 @@ namespace GreenResourceMonitor
 		private void GraphsButton_Click(object sender, RoutedEventArgs e)
 		{
 			string csv = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "logs", "snapshots.csv");
-			GraphsWindow w = new GraphsWindow(csv);
+			GraphsWindow w = new GraphsWindow(csv, appSettings, sqliteService);
 			w.Show();
 		}
-
 	}
 }

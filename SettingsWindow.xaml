@@ -9,17 +9,30 @@
     <Grid>
         <TextBlock HorizontalAlignment="Left" Margin="191,63,0,0" TextWrapping="Wrap" Text="Electricity Price (USD/kWh):" VerticalAlignment="Top"/>
         <TextBox x:Name="PriceBox" HorizontalAlignment="Left" Margin="400,61,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120"/>
-        
+
         <TextBlock HorizontalAlignment="Left" Margin="191,111,0,0" TextWrapping="Wrap" Text="CO₂ Intensity (g/kWh):" VerticalAlignment="Top"/>
         <TextBox x:Name="CO2Box" HorizontalAlignment="Left" Margin="400,109,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120"/>
-        
+
         <TextBlock HorizontalAlignment="Left" Margin="191,171,0,0" TextWrapping="Wrap" Text="Sampling Interval (s):" VerticalAlignment="Top"/>
         <TextBox x:Name="IntervalBox" HorizontalAlignment="Left" Margin="400,169,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120"/>
-        
+
         <TextBlock HorizontalAlignment="Left" Margin="191,219,0,0" TextWrapping="Wrap" Text="Calibration Factor:" VerticalAlignment="Top"/>
         <TextBox x:Name="CalibBox" HorizontalAlignment="Left" Margin="400,217,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120"/>
-        
+
         <Button Content="Save" HorizontalAlignment="Center" Margin="0,336,0,0" VerticalAlignment="Top" Width="80" Click="Save_Click"/>
         <Button Content="Cancel" HorizontalAlignment="Left" Margin="479,336,0,0" VerticalAlignment="Top" Width="80" Click="Cancel_Click"/>
+        <ComboBox x:Name="StorageModeCombo" Margin="563,63,96,316">
+            <ComboBoxItem Content="CSV only" Tag="CSVOnly" />
+            <ComboBoxItem Content="SQLite only" Tag="SQLiteOnly" />
+            <ComboBoxItem Content="Both" Tag="Both" />
+        </ComboBox>
+        <Button x:Name="MigrateCsvToDbButton"
+        Content="Import CSV -> SQLite"
+        Width="142"
+        Height="28"
+        Margin="562,152,0,254"
+        HorizontalAlignment="Left"
+        Click="MigrateCsvToDbButton_Click"/>
+
     </Grid>
 </Window>

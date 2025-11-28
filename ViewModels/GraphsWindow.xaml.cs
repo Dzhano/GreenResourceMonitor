@@ -1,8 +1,11 @@
-﻿using GreenResourceMonitor.Models;
+﻿using DocumentFormat.OpenXml.Wordprocessing;
+using GreenResourceMonitor.Models;
+using GreenResourceMonitor.Services;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -17,6 +20,12 @@ namespace GreenResourceMonitor.ViewModels
 		private readonly string csvPath;
 		private List<ProcessSnapshot> points = new List<ProcessSnapshot>();
 
+		private DateTime startDate, endDate;
+		private string programName;
+
+		private readonly AppSettings appSettings;
+		private readonly SQLiteService sqliteService;
+
 		private readonly Dictionary<string, Func<ProcessSnapshot, double>> metricSelectors =
 			new Dictionary<string, Func<ProcessSnapshot, double>>()
 		{
@@ -27,7 +36,7 @@ namespace GreenResourceMonitor.ViewModels
 			{"Cost (USD)", p => p.CostUSD }
 		};
 
-		public GraphsWindow(string csvPath)
+		public GraphsWindow(string csvPath, AppSettings appSettings, SQLiteService sql)
 		{
 			InitializeComponent();
 			this.csvPath = csvPath;
@@ -35,12 +44,21 @@ namespace GreenResourceMonitor.ViewModels
 			PlotView.Plot.Title("Energy (Wh) over time");
 			PlotView.Plot.Axes.Bottom.Label.Text = "Time";
 			PlotView.Plot.Axes.Left.Label.Text = "Energy (Wh)";
+			
+			this.appSettings = appSettings;
+			this.sqliteService = sql;
 
-			LoadCsv();
+			if (appSettings.StorageMode == StorageMode.CSVOnly || appSettings.StorageMode == StorageMode.Both)
+				LoadCsv();
+			if (appSettings.StorageMode == StorageMode.SQLiteOnly || appSettings.StorageMode == StorageMode.Both)
+			{
+				// var series = sql.GetProcessEnergySeries().ToList(); // Soon to be added
+			}
+
 			PopulateProcessList();
 			MetricCombo.ItemsSource = metricSelectors.Keys.ToList();
 			MetricCombo.SelectedIndex = 2;
-			PlotData("All", "Energy (Wh)");
+			PlotData(programName, "Energy (Wh)");
 		}
 
 		private void LoadCsv()
@@ -99,18 +117,34 @@ namespace GreenResourceMonitor.ViewModels
 
 		private void PlotData(string process, string metrics)
 		{
+			if ((StartDatePicker.SelectedDate != null && EndDatePicker.SelectedDate != null)
+				&& StartDatePicker.SelectedDate.Value > EndDatePicker.SelectedDate.Value)
+			{
+				MessageBox.Show($"End date cannot be earlier than Start date.");
+				StartDatePicker.SelectedDate = null;
+				EndDatePicker.SelectedDate = null;
+				return;
+			}
+
 			PlotView.Plot.Clear();
 			PlotView.Plot.Title($"{metrics} over time");
 			PlotView.Plot.Axes.Left.Label.Text = metrics;
 			if (points.Count == 0) return;
 
+			if (StartDatePicker.SelectedDate == null) startDate = DateTime.MinValue;
+			else startDate = StartDatePicker.SelectedDate.Value;
+			if (EndDatePicker.SelectedDate == null) endDate = DateTime.MaxValue;
+			else endDate = EndDatePicker.SelectedDate.Value;
+
 			if (process == "All")
 			{
 				// Group by timestamp to sum energy of ALL processes at that specific time
 				var groupedData = points
+					.Where(p => p.UtcTimestamp >= startDate && p.UtcTimestamp <= endDate)
 					.GroupBy(p => p.UtcTimestamp)
 					.OrderBy(g => g.Key)
-					.Select(g => new {
+					.Select(g => new
+					{
 						Time = g.Key.ToOADate(),
 						TotalMetrics = g.Sum(metricSelectors[metrics])
 					})
@@ -149,9 +183,11 @@ namespace GreenResourceMonitor.ViewModels
 				// Filter for specific process
 				var data = points
 					.Where(p => p.ProcessName == process)
+					.Where(p => p.UtcTimestamp >= startDate && p.UtcTimestamp <= endDate)
 					.GroupBy(p => p.UtcTimestamp)
 					.OrderBy(g => g.Key)
-					.Select(g => new {
+					.Select(g => new
+					{
 						Time = g.Key.ToOADate(),
 						Metric = g.Sum(metricSelectors[metrics])
 					})
@@ -171,6 +207,8 @@ namespace GreenResourceMonitor.ViewModels
 			PlotView.Plot.Axes.DateTimeTicksBottom(); // Configure Axis to show Dates
 			PlotView.Plot.ShowLegend();
 			PlotView.Refresh();
+
+			programName = process;
 		}
 
 		private void Refresh_Click(object sender, RoutedEventArgs e)
@@ -196,6 +234,44 @@ namespace GreenResourceMonitor.ViewModels
 		{
 			if (MetricCombo.SelectedItem != null)
 				PlotData(ProcessCombo.SelectedItem.ToString(), MetricCombo.SelectedItem.ToString());
+		}
+
+		private void ExportButton_Click(object sender, RoutedEventArgs e)
+		{
+			List<ProcessSnapshot> exportedSnapshots = points
+					.Where(p => p.UtcTimestamp >= startDate && p.UtcTimestamp <= endDate)
+					.ToList();
+
+			if (ProcessCombo.SelectedItem.ToString() != "All")
+			{
+				exportedSnapshots = exportedSnapshots
+					.Where(p => p.ProcessName == ProcessCombo.SelectedItem.ToString())
+					.ToList();
+			}
+			if (exportedSnapshots.Count == 0)
+			{
+				MessageBox.Show("No data available for the selected filters to export.");
+				return;
+			}
+			/*if (MetricCombo.SelectedItem.ToString() != "All")
+			{
+				exportedSnapshots = exportedSnapshots
+					.Select(p => new ProcessSnapshot
+					{
+						UtcTimestamp = p.UtcTimestamp,
+						Pid = p.Pid,
+						ProcessName = p.ProcessName,
+						CpuPercent = MetricCombo.SelectedItem.ToString() == "CPU (%)" ? p.CpuPercent : 0,
+						WorkingSetBytes = MetricCombo.SelectedItem.ToString() == "Memory (Bytes)" ? p.WorkingSetBytes : 0,
+						EnergyWh = MetricCombo.SelectedItem.ToString() == "Energy (Wh)" ? p.EnergyWh : 0,
+						CO2Grams = MetricCombo.SelectedItem.ToString() == "CO2 (g)" ? p.CO2Grams : 0,
+						CostUSD = MetricCombo.SelectedItem.ToString() == "Cost (USD)" ? p.CostUSD : 0
+					})
+					.ToList();
+			}*/ // Potential usage in the future
+
+			ExportWindow exportWindow = new ExportWindow(appSettings, sqliteService, exportedSnapshots);
+			exportWindow.Show();
 		}
 	}
 }
