@@ -7,23 +7,12 @@
       "RelativeMoniker": "D:0:0:{FAD4AC04-781C-4ABB-A826-B69E08371577}|GreenResourceMonitor.csproj|solutionrelative:viewmodels\\graphswindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{FAD4AC04-781C-4ABB-A826-B69E08371577}|GreenResourceMonitor.csproj|D:\\AUBG\\Classes\\Computer Science (COS)\\COS4091A_2025FA Senior Project I\\GreenResourceMonitor\\GreenResourceMonitor\\services\\sqliteservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{FAD4AC04-781C-4ABB-A826-B69E08371577}|GreenResourceMonitor.csproj|solutionrelative:services\\sqliteservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{FAD4AC04-781C-4ABB-A826-B69E08371577}|GreenResourceMonitor.csproj|D:\\AUBG\\Classes\\Computer Science (COS)\\COS4091A_2025FA Senior Project I\\GreenResourceMonitor\\GreenResourceMonitor\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{FAD4AC04-781C-4ABB-A826-B69E08371577}|GreenResourceMonitor.csproj|solutionrelative:mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{FAD4AC04-781C-4ABB-A826-B69E08371577}|GreenResourceMonitor.csproj|D:\\AUBG\\Classes\\Computer Science (COS)\\COS4091A_2025FA Senior Project I\\GreenResourceMonitor\\GreenResourceMonitor\\exportwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{FAD4AC04-781C-4ABB-A826-B69E08371577}|GreenResourceMonitor.csproj|solutionrelative:exportwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\HP\\AppData\\Roaming\\GreenResourceMonitor\\settings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{FAD4AC04-781C-4ABB-A826-B69E08371577}|GreenResourceMonitor.csproj|D:\\AUBG\\Classes\\Computer Science (COS)\\COS4091A_2025FA Senior Project I\\GreenResourceMonitor\\GreenResourceMonitor\\viewmodels\\graphswindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{FAD4AC04-781C-4ABB-A826-B69E08371577}|GreenResourceMonitor.csproj|solutionrelative:viewmodels\\graphswindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+      "AbsoluteMoniker": "D:0:0:{FAD4AC04-781C-4ABB-A826-B69E08371577}|GreenResourceMonitor.csproj|D:\\AUBG\\Classes\\Computer Science (COS)\\COS4091A_2025FA Senior Project I\\GreenResourceMonitor\\GreenResourceMonitor\\services\\sqliteservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FAD4AC04-781C-4ABB-A826-B69E08371577}|GreenResourceMonitor.csproj|solutionrelative:services\\sqliteservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -37,7 +26,7 @@
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "SQLiteService.cs",
               "DocumentMoniker": "D:\\AUBG\\Classes\\Computer Science (COS)\\COS4091A_2025FA Senior Project I\\GreenResourceMonitor\\GreenResourceMonitor\\Services\\SQLiteService.cs",
               "RelativeDocumentMoniker": "Services\\SQLiteService.cs",
@@ -46,8 +35,7 @@
               "ViewState": "AgIAAAYAAAAAAAAAAAAAABQAAAAEAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-11-23T13:31:56.636Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
@@ -57,7 +45,7 @@
               "RelativeDocumentMoniker": "ViewModels\\GraphsWindow.xaml.cs",
               "ToolTip": "D:\\AUBG\\Classes\\Computer Science (COS)\\COS4091A_2025FA Senior Project I\\GreenResourceMonitor\\GreenResourceMonitor\\ViewModels\\GraphsWindow.xaml.cs*",
               "RelativeToolTip": "ViewModels\\GraphsWindow.xaml.cs*",
-              "ViewState": "AgIAAO0AAAAAAAAAAAAwwDwAAAADAAAAAAAAAA==",
+              "ViewState": "AgIAAOQAAAAAAAAAAAAowPkAAABUAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-11-26T11:30:26.999Z",
               "IsPinned": true,
@@ -73,51 +61,15 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "GraphsWindow.xaml",
-              "DocumentMoniker": "D:\\AUBG\\Classes\\Computer Science (COS)\\COS4091A_2025FA Senior Project I\\GreenResourceMonitor\\GreenResourceMonitor\\ViewModels\\GraphsWindow.xaml",
-              "RelativeDocumentMoniker": "ViewModels\\GraphsWindow.xaml",
-              "ToolTip": "D:\\AUBG\\Classes\\Computer Science (COS)\\COS4091A_2025FA Senior Project I\\GreenResourceMonitor\\GreenResourceMonitor\\ViewModels\\GraphsWindow.xaml",
-              "RelativeToolTip": "ViewModels\\GraphsWindow.xaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-11-28T09:32:12.737Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "MainWindow.xaml",
-              "DocumentMoniker": "D:\\AUBG\\Classes\\Computer Science (COS)\\COS4091A_2025FA Senior Project I\\GreenResourceMonitor\\GreenResourceMonitor\\MainWindow.xaml",
-              "RelativeDocumentMoniker": "MainWindow.xaml",
-              "ToolTip": "D:\\AUBG\\Classes\\Computer Science (COS)\\COS4091A_2025FA Senior Project I\\GreenResourceMonitor\\GreenResourceMonitor\\MainWindow.xaml",
-              "RelativeToolTip": "MainWindow.xaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-11-28T08:56:53.414Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 1,
               "Title": "ExportWindow.xaml.cs",
               "DocumentMoniker": "D:\\AUBG\\Classes\\Computer Science (COS)\\COS4091A_2025FA Senior Project I\\GreenResourceMonitor\\GreenResourceMonitor\\ExportWindow.xaml.cs",
               "RelativeDocumentMoniker": "ExportWindow.xaml.cs",
               "ToolTip": "D:\\AUBG\\Classes\\Computer Science (COS)\\COS4091A_2025FA Senior Project I\\GreenResourceMonitor\\GreenResourceMonitor\\ExportWindow.xaml.cs",
               "RelativeToolTip": "ExportWindow.xaml.cs",
-              "ViewState": "AgIAAEMAAAAAAAAAAAAuwFIAAAAKAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAFIAAAAKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-26T15:13:44.739Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "settings.json",
-              "DocumentMoniker": "C:\\Users\\HP\\AppData\\Roaming\\GreenResourceMonitor\\settings.json",
-              "ToolTip": "C:\\Users\\HP\\AppData\\Roaming\\GreenResourceMonitor\\settings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-11-26T10:57:37.281Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-26T15:13:44.739Z"
             }
           ]
         }
