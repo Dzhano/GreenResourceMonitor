@@ -15,6 +15,7 @@ namespace GreenResourceMonitor
 	public partial class MainWindow : Window
 	{
 		private readonly ProcessSnapshotViewModel _vm = new ProcessSnapshotViewModel();
+		private readonly string csvPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "logs", "snapshots.csv");
 		private IProcessCollector collector;
 		private CancellationTokenSource cancellation;
 
@@ -54,7 +55,7 @@ namespace GreenResourceMonitor
 
 			cancellation = new CancellationTokenSource();
 			collector = new ProcessCollectorService(TimeSpan.FromSeconds(appSettings.SamplingSeconds), 
-						System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "logs", "snapshots.csv"),
+						csvPath,
 						appSettings, sqlService);
 			collector.OnProcessSnapshot += Collector_OnProcessSnapshot;
 			await collector.StartAsync(cancellation.Token);
@@ -109,7 +110,7 @@ namespace GreenResourceMonitor
 
 		private void GraphsButton_Click(object sender, RoutedEventArgs e)
 		{
-			string csv = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "logs", "snapshots.csv");
+			string csv = csvPath;
 			GraphsWindow w = new GraphsWindow(csv, appSettings, sqlService);
 			w.Show();
 		}

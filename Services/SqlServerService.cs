@@ -97,6 +97,52 @@ namespace GreenResourceMonitor.Services
 			}
 		}
 
+		public void InsertSnapshots(IEnumerable<ProcessSnapshot> snapshots)
+		{
+			using (SqlConnection connection = new SqlConnection(databaseConnectionString))
+			{
+				connection.Open();
+				using (SqlTransaction transaction = connection.BeginTransaction())
+				{
+					foreach (ProcessSnapshot snapshot in snapshots)
+					{
+						using (SqlCommand command = connection.CreateCommand())
+						{
+							command.Transaction = transaction;
+							command.CommandText = @"
+								INSERT INTO Snapshots 
+								(Timestamp, ProcessId, ProcessName, CpuPercent, WorkingSetBytes, EnergyWh, CO2Grams, CostUSD)
+								VALUES (@Timestamp, @ProcessId, @ProcessName, @CpuPercent, @WorkingSetBytes, @EnergyWh, @CO2Grams, @CostUSD);";
+							command.Parameters.AddWithValue("@Timestamp", snapshot.UtcTimestamp);
+							command.Parameters.AddWithValue("@ProcessId", snapshot.Pid);
+							command.Parameters.AddWithValue("@ProcessName", snapshot.ProcessName);
+							command.Parameters.AddWithValue("@CpuPercent", snapshot.CpuPercent);
+							command.Parameters.AddWithValue("@WorkingSetBytes", snapshot.WorkingSetBytes);
+							command.Parameters.AddWithValue("@EnergyWh", snapshot.EnergyWh);
+							command.Parameters.AddWithValue("@CO2Grams", snapshot.CO2Grams);
+							command.Parameters.AddWithValue("@CostUSD", snapshot.CostUSD);
+							command.ExecuteNonQuery();
+						}
+					}
+					transaction.Commit();
+				}
+			}
+		}
+
+		public void DeleteSnapshots()
+		{
+			// Delete all snapshots
+			using (SqlConnection connection = new SqlConnection(databaseConnectionString))
+			{
+				connection.Open();
+				using (SqlCommand command = connection.CreateCommand())
+				{
+					command.CommandText = "DELETE FROM Snapshots;";
+					command.ExecuteNonQuery();
+				}
+			}
+		}
+
 		public IEnumerable<ProcessSnapshot> GetSnapshots()
 		{
 			// Retrieve all snapshots

@@ -56,6 +56,7 @@ namespace GreenResourceMonitor
 				ws.Cell(1, 6).Value = "EnergyWh";
 				ws.Cell(1, 7).Value = "CO2Grams";
 				ws.Cell(1, 8).Value = "CostUSD";
+				ws.Row(1).Style.Font.Bold = true;
 				int r = 2;
 				foreach (var p in points)
 				{

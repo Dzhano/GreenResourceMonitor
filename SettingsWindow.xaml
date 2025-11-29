@@ -26,6 +26,8 @@
             <ComboBoxItem Content="SQLite only" Tag="SQLiteOnly" />
             <ComboBoxItem Content="Both" Tag="Both" />
         </ComboBox>
-
+        <Button x:Name="MigrateCsvToDbButton" Content="Migrate CSV to Database" HorizontalAlignment="Left" Margin="392,269,0,0" VerticalAlignment="Top" Width="170" Click="MigrateCsvToDbButton_Click"/>
+        <Button x:Name="DeleteCsvDataButton" Content="Delete CSV Database" HorizontalAlignment="Left" Margin="178,269,0,0" VerticalAlignment="Top" Width="170" Click="DeleteCsvDataButton_Click"/>
+        <Button x:Name="DeleteSqlDataButton" Content="Delete SQL Database" HorizontalAlignment="Left" Margin="178,306,0,0" VerticalAlignment="Top" Width="170" Click="DeleteSqlDataButton_Click"/>
     </Grid>
 </Window>

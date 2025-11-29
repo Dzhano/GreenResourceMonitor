@@ -33,7 +33,7 @@ namespace GreenResourceMonitor.Services
 			this.interval = interval ?? TimeSpan.FromSeconds(1);
 			this.csvPath = csvPath;
 			appSettings = settings ?? new AppSettings();
-			sqlService = sql ?? new SqlServerService(appSettings.SQLitePath);
+			sqlService = sql ?? new SqlServerService(appSettings.SQLPath);
 
 			if (!string.IsNullOrEmpty(this.csvPath))
 			{
