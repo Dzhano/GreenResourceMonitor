@@ -9,7 +9,7 @@ namespace GreenResourceMonitor.Models
 	public class AppSettings
 	{
 		public double Co2PerWh { get; set; } = 0.475; // Default CO2 grams per Wh
-		public double CostPerKWhUSD { get; set; } = 0.15; // Default cost per kWh in USD
+		public double CostPerKWhEUR { get; set; } = 0.13; // Default cost per kWh in EUR
 		public int SamplingSeconds { get; set; } = 1; // Default sampling interval in seconds
 		public double CalibrationFactor { get; set; } = 1.0; // Default calibration factor to adjust energy estimates for accuracy
 

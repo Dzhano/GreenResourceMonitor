@@ -61,7 +61,7 @@ namespace GreenResourceMonitor.Services
 					WorkingSetBytes BIGINT NOT NULL,
 					EnergyWh FLOAT NOT NULL,
 					CO2Grams FLOAT NOT NULL,
-					CostUSD FLOAT NOT NULL
+					CostEUR FLOAT NOT NULL
 				);";
 			using (SqlConnection connection = new SqlConnection(databaseConnectionString))
 			{
@@ -82,8 +82,8 @@ namespace GreenResourceMonitor.Services
 				{
 					command.CommandText = @"
 						INSERT INTO Snapshots 
-						(Timestamp, ProcessId, ProcessName, CpuPercent, WorkingSetBytes, EnergyWh, CO2Grams, CostUSD)
-						VALUES (@Timestamp, @ProcessId, @ProcessName, @CpuPercent, @WorkingSetBytes, @EnergyWh, @CO2Grams, @CostUSD);";
+						(Timestamp, ProcessId, ProcessName, CpuPercent, WorkingSetBytes, EnergyWh, CO2Grams, CostEUR)
+						VALUES (@Timestamp, @ProcessId, @ProcessName, @CpuPercent, @WorkingSetBytes, @EnergyWh, @CO2Grams, @CostEUR);";
 					command.Parameters.AddWithValue("@Timestamp", processSnapshot.UtcTimestamp);
 					command.Parameters.AddWithValue("@ProcessId", processSnapshot.Pid);
 					command.Parameters.AddWithValue("@ProcessName", processSnapshot.ProcessName);
@@ -91,7 +91,7 @@ namespace GreenResourceMonitor.Services
 					command.Parameters.AddWithValue("@WorkingSetBytes", processSnapshot.WorkingSetBytes);
 					command.Parameters.AddWithValue("@EnergyWh", processSnapshot.EnergyWh);
 					command.Parameters.AddWithValue("@CO2Grams", processSnapshot.CO2Grams);
-					command.Parameters.AddWithValue("@CostUSD", processSnapshot.CostUSD);
+					command.Parameters.AddWithValue("@CostEUR", processSnapshot.CostEUR);
 					command.ExecuteNonQuery();
 				}
 			}
@@ -111,8 +111,8 @@ namespace GreenResourceMonitor.Services
 							command.Transaction = transaction;
 							command.CommandText = @"
 								INSERT INTO Snapshots 
-								(Timestamp, ProcessId, ProcessName, CpuPercent, WorkingSetBytes, EnergyWh, CO2Grams, CostUSD)
-								VALUES (@Timestamp, @ProcessId, @ProcessName, @CpuPercent, @WorkingSetBytes, @EnergyWh, @CO2Grams, @CostUSD);";
+								(Timestamp, ProcessId, ProcessName, CpuPercent, WorkingSetBytes, EnergyWh, CO2Grams, CostEUR)
+								VALUES (@Timestamp, @ProcessId, @ProcessName, @CpuPercent, @WorkingSetBytes, @EnergyWh, @CO2Grams, @CostEUR);";
 							command.Parameters.AddWithValue("@Timestamp", snapshot.UtcTimestamp);
 							command.Parameters.AddWithValue("@ProcessId", snapshot.Pid);
 							command.Parameters.AddWithValue("@ProcessName", snapshot.ProcessName);
@@ -120,7 +120,7 @@ namespace GreenResourceMonitor.Services
 							command.Parameters.AddWithValue("@WorkingSetBytes", snapshot.WorkingSetBytes);
 							command.Parameters.AddWithValue("@EnergyWh", snapshot.EnergyWh);
 							command.Parameters.AddWithValue("@CO2Grams", snapshot.CO2Grams);
-							command.Parameters.AddWithValue("@CostUSD", snapshot.CostUSD);
+							command.Parameters.AddWithValue("@CostEUR", snapshot.CostEUR);
 							command.ExecuteNonQuery();
 						}
 					}
@@ -153,7 +153,7 @@ namespace GreenResourceMonitor.Services
 				using (SqlCommand command = connection.CreateCommand())
 				{
 					command.CommandText = @"
-						SELECT Timestamp, ProcessId, ProcessName, CpuPercent, WorkingSetBytes, EnergyWh, CO2Grams, CostUSD
+						SELECT Timestamp, ProcessId, ProcessName, CpuPercent, WorkingSetBytes, EnergyWh, CO2Grams, CostEUR
 						FROM Snapshots
 						ORDER BY Timestamp;";
 					using (SqlDataReader reader = command.ExecuteReader())
@@ -169,7 +169,7 @@ namespace GreenResourceMonitor.Services
 								WorkingSetBytes = reader.GetInt64(4),
 								EnergyWh = reader.GetDouble(5),
 								CO2Grams = reader.GetDouble(6),
-								CostUSD = reader.GetDouble(7)
+								CostEUR = reader.GetDouble(7)
 							};
 							snapshots.Add(snapshot);
 						}

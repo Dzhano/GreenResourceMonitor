@@ -30,10 +30,10 @@ namespace GreenResourceMonitor
 			using (var writer = new System.IO.StreamWriter(sfd.FileName))
 			{
 				// header
-				writer.WriteLine("Timestamp,Pid,ProcessName,CpuPercent,WorkingSetBytes,EnergyWh,CO2Grams,CostUSD");
+				writer.WriteLine("Timestamp,Pid,ProcessName,CpuPercent,WorkingSetBytes,EnergyWh,CO2Grams,CostEUR");
 				foreach (var p in points)
 				{
-					writer.WriteLine($"{p.UtcTimestamp},{p.Pid},{p.ProcessName},{p.CpuPercent},{p.WorkingSetBytes},{p.EnergyWh},{p.CO2Grams},{p.CostUSD}");
+					writer.WriteLine($"{p.UtcTimestamp},{p.Pid},{p.ProcessName},{p.CpuPercent},{p.WorkingSetBytes},{p.EnergyWh},{p.CO2Grams},{p.CostEUR}");
 				}
 			}
 			MessageBox.Show($"Exported {points.Count} rows to \n{sfd.FileName}");
@@ -55,7 +55,7 @@ namespace GreenResourceMonitor
 				ws.Cell(1, 5).Value = "WorkingSetBytes";
 				ws.Cell(1, 6).Value = "EnergyWh";
 				ws.Cell(1, 7).Value = "CO2Grams";
-				ws.Cell(1, 8).Value = "CostUSD";
+				ws.Cell(1, 8).Value = "CostEUR";
 				ws.Row(1).Style.Font.Bold = true;
 				int r = 2;
 				foreach (var p in points)
@@ -67,7 +67,7 @@ namespace GreenResourceMonitor
 					ws.Cell(r, 5).Value = p.WorkingSetBytes;
 					ws.Cell(r, 6).Value = p.EnergyWh;
 					ws.Cell(r, 7).Value = p.CO2Grams;
-					ws.Cell(r, 8).Value = p.CostUSD;
+					ws.Cell(r, 8).Value = p.CostEUR;
 					r++;
 				}
 				ws.Columns().AdjustToContents();

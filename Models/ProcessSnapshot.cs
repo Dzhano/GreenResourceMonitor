@@ -25,7 +25,7 @@ namespace GreenResourceMonitor.Models
 		// Energy and environmental impact estimates
 		public double EnergyWh { get; set; }
 		public double CO2Grams { get; set; }
-		public double CostUSD { get; set; } // We are going to calculate all countries in USD to have a common ground for comparison.
+		public double CostEUR { get; set; } // We are going to calculate all countries in EUR to have a common ground for comparison.
 
 	}
 }

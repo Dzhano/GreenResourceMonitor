@@ -31,7 +31,7 @@ namespace GreenResourceMonitor
 
 		private void LoadInfoFields()
 		{
-			PriceBox.Text = appSettings.CostPerKWhUSD.ToString();
+			PriceBox.Text = appSettings.CostPerKWhEUR.ToString();
 			CO2Box.Text = appSettings.Co2PerWh.ToString();
 			IntervalBox.Text = appSettings.SamplingSeconds.ToString();
 			CalibBox.Text = appSettings.CalibrationFactor.ToString();
@@ -95,7 +95,7 @@ namespace GreenResourceMonitor
 			}
 			try
 			{
-				appSettings.CostPerKWhUSD = double.Parse(PriceBox.Text);
+				appSettings.CostPerKWhEUR = double.Parse(PriceBox.Text);
 				appSettings.Co2PerWh = double.Parse(CO2Box.Text);
 				appSettings.SamplingSeconds = int.Parse(IntervalBox.Text);
 				appSettings.CalibrationFactor = double.Parse(CalibBox.Text);
@@ -162,7 +162,7 @@ namespace GreenResourceMonitor
 							WorkingSetBytes = long.Parse(parts[4]),
 							EnergyWh = double.Parse(parts[5]),
 							CO2Grams = double.Parse(parts[6]),
-							CostUSD = double.Parse(parts[7])
+							CostEUR = double.Parse(parts[7])
 						});
 					}
 					catch (Exception)
@@ -291,8 +291,8 @@ namespace GreenResourceMonitor
 					appSettings.Co2PerWh = selectedCountry.Co2PerKWh / 1000.0; // Convert g/kWh to g/Wh
 					CO2Box.Text = appSettings.Co2PerWh.ToString();
 
-					appSettings.CostPerKWhUSD = selectedCountry.CostPerKWhUSD;
-					PriceBox.Text = appSettings.CostPerKWhUSD.ToString();
+					appSettings.CostPerKWhEUR = selectedCountry.CostPerKWhEUR / 1000.0; // Convert EUR/MWh to EUR/kWh
+					PriceBox.Text = appSettings.CostPerKWhEUR.ToString();
 				}
 			}
 		}

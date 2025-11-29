@@ -25,7 +25,7 @@
                 <DataGridTextColumn Header="Memory" Binding="{Binding WorkingSetReadable}" Width="120"/>
                 <DataGridTextColumn Header="Energy (Wh)" Binding="{Binding EnergyWh, StringFormat=F6}" Width="110"/>
                 <DataGridTextColumn Header="CO₂ (g)" Binding="{Binding CO2Grams, StringFormat=F3}" Width="90"/>
-                <DataGridTextColumn Header="Cost ($/Wh)" Binding="{Binding CostUSD, StringFormat=F12}" Width="120"/>
+                <DataGridTextColumn Header="Cost (€/Wh)" Binding="{Binding CostEUR, StringFormat=F12}" Width="120"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

@@ -35,7 +35,7 @@ namespace GreenResourceMonitor.ViewModels
 			{"Memory (Bytes)", p => (double)p.WorkingSetBytes }, // Convert long to double for plotting
             {"Energy (Wh)", p => p.EnergyWh },
 			{"CO2 (g)", p => p.CO2Grams },
-			{"Cost (USD)", p => p.CostUSD }
+			{"Cost (EUR)", p => p.CostEUR }
 		};
 
 		public GraphsWindow(string csvPath, AppSettings appSettings, SqlServerService sql)
@@ -93,7 +93,7 @@ namespace GreenResourceMonitor.ViewModels
 									  WorkingSetBytes = long.Parse(p[4]),
 									  EnergyWh = double.Parse(p[5]),
 									  CO2Grams = double.Parse(p[6]),
-									  CostUSD = double.Parse(p[7])
+									  CostEUR = double.Parse(p[7])
 								  };
 							  })
 							  .Where(ps => ps != null)
@@ -197,8 +197,8 @@ namespace GreenResourceMonitor.ViewModels
 						case "CO2 (g)":
 							scatter.LegendText = "Total CO2 (g)";
 							break;
-						case "Cost (USD)":
-							scatter.LegendText = "Total Cost (USD)";
+						case "Cost (EUR)":
+							scatter.LegendText = "Total Cost (EUR)";
 							break;
 					}
 					scatter.LineWidth = 2;
