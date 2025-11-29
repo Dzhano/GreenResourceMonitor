@@ -278,5 +278,23 @@ namespace GreenResourceMonitor
 				MessageBox.Show("Failed to clear SQL DB: " + ex.Message, "Clear SQL DB", MessageBoxButton.OK, MessageBoxImage.Error);
 			}
 		}
-	}
+
+		private void CountryButton_Click(object sender, RoutedEventArgs e)
+		{
+			CountrySelectionWindow countryWindow = new CountrySelectionWindow();
+			
+			if (countryWindow.ShowDialog() == true)
+			{
+				CountryData selectedCountry = countryWindow.SelectedCountryData;
+				if (selectedCountry != null)
+				{
+					appSettings.Co2PerWh = selectedCountry.Co2PerKWh / 1000.0; // Convert g/kWh to g/Wh
+					CO2Box.Text = appSettings.Co2PerWh.ToString();
+
+					appSettings.CostPerKWhUSD = selectedCountry.CostPerKWhUSD;
+					PriceBox.Text = appSettings.CostPerKWhUSD.ToString();
+				}
+			}
+		}
+    }
 }

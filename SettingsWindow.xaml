@@ -21,13 +21,16 @@
 
         <Button Content="Save" HorizontalAlignment="Center" Margin="0,336,0,0" VerticalAlignment="Top" Width="80" Click="Save_Click"/>
         <Button Content="Cancel" HorizontalAlignment="Left" Margin="479,336,0,0" VerticalAlignment="Top" Width="80" Click="Cancel_Click"/>
-        <ComboBox x:Name="StorageModeCombo" Margin="563,63,96,316">
+        
+        <Button x:Name="MigrateCsvToDbButton" Content="Migrate CSV to Database" HorizontalAlignment="Left" Margin="392,269,0,0" VerticalAlignment="Top" Width="170" Click="MigrateCsvToDbButton_Click"/>
+        <Button x:Name="DeleteCsvDataButton" Content="Delete CSV Database" HorizontalAlignment="Left" Margin="178,269,0,0" VerticalAlignment="Top" Width="170" Click="DeleteCsvDataButton_Click"/>
+        <Button x:Name="DeleteSqlDataButton" Content="Delete SQL Database" HorizontalAlignment="Left" Margin="178,306,0,0" VerticalAlignment="Top" Width="170" Click="DeleteSqlDataButton_Click"/>
+        
+        <Button x:Name="CountryButton" Content="Select Country" HorizontalAlignment="Left" Margin="540,61,0,0" VerticalAlignment="Top" Width="140" Height="22" Click="CountryButton_Click"/>
+        <ComboBox x:Name="StorageModeCombo" Margin="540,109,119,270">
             <ComboBoxItem Content="CSV only" Tag="CSVOnly" />
             <ComboBoxItem Content="SQLite only" Tag="SQLiteOnly" />
             <ComboBoxItem Content="Both" Tag="Both" />
         </ComboBox>
-        <Button x:Name="MigrateCsvToDbButton" Content="Migrate CSV to Database" HorizontalAlignment="Left" Margin="392,269,0,0" VerticalAlignment="Top" Width="170" Click="MigrateCsvToDbButton_Click"/>
-        <Button x:Name="DeleteCsvDataButton" Content="Delete CSV Database" HorizontalAlignment="Left" Margin="178,269,0,0" VerticalAlignment="Top" Width="170" Click="DeleteCsvDataButton_Click"/>
-        <Button x:Name="DeleteSqlDataButton" Content="Delete SQL Database" HorizontalAlignment="Left" Margin="178,306,0,0" VerticalAlignment="Top" Width="170" Click="DeleteSqlDataButton_Click"/>
     </Grid>
 </Window>

@@ -169,10 +169,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="CountrySelectionWindow.xaml.cs">
+      <DependentUpon>CountrySelectionWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ExportWindow.xaml.cs">
       <DependentUpon>ExportWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\AppSettings.cs" />
+    <Compile Include="Models\CountryData.cs" />
+    <Compile Include="Services\CountryDataService.cs" />
     <Compile Include="Services\IProcessCollector.cs" />
     <Compile Include="Services\ProcessCollectorService.cs" />
     <Compile Include="Services\SettingsService.cs" />
@@ -184,6 +189,10 @@
       <DependentUpon>GraphsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\ProcessSnapshotViewModel.cs" />
+    <Page Include="CountrySelectionWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ExportWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

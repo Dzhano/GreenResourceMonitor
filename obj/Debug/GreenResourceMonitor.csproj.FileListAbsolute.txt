@@ -146,3 +146,5 @@ D:\AUBG\Classes\Computer Science (COS)\COS4091A_2025FA Senior Project I\GreenRes
 D:\AUBG\Classes\Computer Science (COS)\COS4091A_2025FA Senior Project I\GreenResourceMonitor\GreenResourceMonitor\bin\Debug\ExcelNumberFormat.xml
 D:\AUBG\Classes\Computer Science (COS)\COS4091A_2025FA Senior Project I\GreenResourceMonitor\GreenResourceMonitor\bin\Debug\RBush.xml
 D:\AUBG\Classes\Computer Science (COS)\COS4091A_2025FA Senior Project I\GreenResourceMonitor\GreenResourceMonitor\bin\Debug\SixLabors.Fonts.xml
+D:\AUBG\Classes\Computer Science (COS)\COS4091A_2025FA Senior Project I\GreenResourceMonitor\GreenResourceMonitor\obj\Debug\CountrySelectionWindow.baml
+D:\AUBG\Classes\Computer Science (COS)\COS4091A_2025FA Senior Project I\GreenResourceMonitor\GreenResourceMonitor\obj\Debug\CountrySelectionWindow.g.cs
