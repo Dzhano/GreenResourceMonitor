@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Windows;
+using System.Windows.Threading;
 
 namespace GreenResourceMonitor
 {
@@ -26,6 +27,8 @@ namespace GreenResourceMonitor
 		private AppSettings appSettings;
 		private SqlServerService sqlService;
 
+		private DispatcherTimer uiTimer;
+
 		public MainWindow()
 		{
 			InitializeComponent();
@@ -37,6 +40,8 @@ namespace GreenResourceMonitor
 			settingsService = new SettingsService();
 			appSettings = settingsService.Load();
 			sqlService = new SqlServerService();
+
+			StartClock();
 		}
 
 		protected override void OnClosed(EventArgs e)
@@ -45,6 +50,8 @@ namespace GreenResourceMonitor
 			collector?.StopAsync().ConfigureAwait(false).GetAwaiter().GetResult(); // ensure collector stopped
 			cancellation?.Cancel();
 			collector?.Dispose();
+
+			if (uiTimer != null) uiTimer.Stop();
 		}
 
 		private async void StartButton_Click(object sender, RoutedEventArgs e)
@@ -113,6 +120,40 @@ namespace GreenResourceMonitor
 			string csv = csvPath;
 			GraphsWindow w = new GraphsWindow(csv, appSettings, sqlService);
 			w.Show();
+		}
+
+		private void StartClock()
+		{
+			uiTimer = new DispatcherTimer
+			{
+				Interval = TimeSpan.FromSeconds(1)
+			};
+			uiTimer.Tick += ClockTimer_Tick;
+			uiTimer.Start();
+
+			ClockTimer_Tick(null, null); // initial call to set time immediately
+		}
+
+		private void ClockTimer_Tick(object sender, EventArgs e)
+		{
+			DateTime now = DateTime.Now;
+			
+			TimeLabel.Text = now.ToString("HH:mm:ss");
+			DateLabel.Text = now.ToString("dddd, dd MMMM yyyy");
+		}
+
+		private void AboutButton_Click(object sender, RoutedEventArgs e)
+		{
+			AboutPage aboutPage = new AboutPage();
+
+			aboutPage.CloseRequested += (s, args) =>
+			{
+				MainFrame.Visibility = Visibility.Collapsed;
+				MainFrame.Content = null;
+			};
+
+			MainFrame.Content = aboutPage;
+			MainFrame.Visibility = Visibility.Visible;
 		}
 	}
 }

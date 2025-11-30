@@ -52,20 +52,12 @@ namespace GreenResourceMonitor.ViewModels
 
 			if (appSettings.StorageMode == StorageMode.CSVOnly || appSettings.StorageMode == StorageMode.Both)
 				LoadCsv();
-			if (appSettings.StorageMode == StorageMode.SQLiteOnly || appSettings.StorageMode == StorageMode.Both)
-			{
-				// Load from SQL Server
-				var sqlPoints = sqlServerService.GetSnapshots();
-				points.AddRange(sqlPoints); // In case of both, SQL data is appended to the CSV data
-				points = points
-					.OrderBy(p => p.UtcTimestamp) // Ensure that the new snapshots are added in the correct positions
-					.ToList();
-			}
+			if (appSettings.StorageMode == StorageMode.SQLOnly || appSettings.StorageMode == StorageMode.Both)
+				LoadSQL();
 
 			PopulateProcessList();
-			MetricCombo.ItemsSource = metricSelectors.Keys.ToList();
-			MetricCombo.SelectedIndex = 2;
-			PlotData("All", "Energy (Wh)");
+			MetricCombo.ItemsSource = metricSelectors.Keys.ToList(); // Directly calls PlotData after it stores the keys since it calls MetricCombo_SelectionChanged
+			// PlotData("All", "Energy (Wh)"); // This is not needed since MetricCombo does the job
 		}
 
 		private void LoadCsv()
@@ -111,6 +103,20 @@ namespace GreenResourceMonitor.ViewModels
 			}
 		}
 
+		private void LoadSQL()
+		{
+			// Load from SQL Server
+			var sqlPoints = sqlServerService.GetSnapshots();
+			points.AddRange(sqlPoints); // In case of both, SQL data is appended to the CSV data
+			points = points
+				.OrderBy(p => p.UtcTimestamp) // Ensure that the new snapshots are added in the correct positions
+				.ToList();
+
+			pointsByProcess = points
+				.GroupBy(p => p.ProcessName)
+				.ToDictionary(g => g.Key, g => g.ToList());
+		}
+
 		private void PopulateProcessList()
 		{
 			if (points == null || points.Count == 0) return;
@@ -121,11 +127,9 @@ namespace GreenResourceMonitor.ViewModels
 				.ToList();
 
 			ProcessCombo.Items.Clear();
-			ProcessCombo.Items.Add("All");
+			ProcessCombo.Items.Add("All"); // Calls ProcessCombo_SelectionChanged and then PlotData
 			foreach (string n in names)
 				ProcessCombo.Items.Add(n);
-
-			ProcessCombo.SelectedIndex = 0;
 		}
 
 		private void PlotData(string process, string metrics)
@@ -309,26 +313,30 @@ namespace GreenResourceMonitor.ViewModels
 
 		private void Refresh_Click(object sender, RoutedEventArgs e)
 		{
-			LoadCsv();
-			int processIndex = ProcessCombo.SelectedIndex;
+			points.Clear(); // Removing all snapshots from the list
+			if (appSettings.StorageMode == StorageMode.CSVOnly || appSettings.StorageMode == StorageMode.Both)
+				LoadCsv();
+			if (appSettings.StorageMode == StorageMode.SQLOnly || appSettings.StorageMode == StorageMode.Both)
+				LoadSQL();
+
+			int processIndex = ProcessCombo.SelectedIndex; // Makes sure that we remain on the same process from before the refresh
 			PopulateProcessList();
-			ProcessCombo.SelectedIndex = processIndex >= 0 ? processIndex : 0;
-			if (ProcessCombo.SelectedItem != null)
-				PlotData(ProcessCombo.SelectedItem.ToString(), MetricCombo.SelectedItem.ToString());
+			ProcessCombo.SelectedIndex = processIndex >= 0 ? processIndex : 0; // It calls ProcessCombo_SelectionChanged
 		}
 
 		private void ProcessCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
-			if (ProcessCombo.SelectedItem != null)
+			if (ProcessCombo.SelectedItem != null) // It is never null, but it is a good practice to have this if statement
 			{
-				if (MetricCombo.SelectedItem == null) PlotData(ProcessCombo.SelectedItem.ToString(), "Energy (Wh)");
+				if (MetricCombo.SelectedItem == null) // It is never null, but it is a good practice to have this if statement
+					PlotData(ProcessCombo.SelectedItem.ToString(), "Energy (Wh)");
 				else PlotData(ProcessCombo.SelectedItem.ToString(), MetricCombo.SelectedItem.ToString());
 			}
 		}
 
 		private void MetricCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
-			if (MetricCombo.SelectedItem != null && ProcessCombo.SelectedItem != null)
+			if (MetricCombo.SelectedItem != null && ProcessCombo.SelectedItem != null) // They are never null, but it is a good practice to have this if statement
 				PlotData(ProcessCombo.SelectedItem.ToString(), MetricCombo.SelectedItem.ToString());
 		}
 
@@ -343,7 +351,7 @@ namespace GreenResourceMonitor.ViewModels
 				return;
 			}
 			
-			ExportWindow exportWindow = new ExportWindow(appSettings, sqlServerService, exportedSnapshots);
+			ExportWindow exportWindow = new ExportWindow(exportedSnapshots);
 			exportWindow.Show();
 		}
 	}

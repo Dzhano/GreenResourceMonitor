@@ -5,28 +5,127 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GreenResourceMonitor"
         mc:Ignorable="d"
-        Title="MainWindow" Height="465" Width="800">
-    <Grid>
-        <StackPanel Orientation="Horizontal" Margin="0,0,0,379" VerticalAlignment="Top">
-            <Button Name="StartButton" Content="Start" Width="100" Height="41" Margin="7,0,8,0" Click="StartButton_Click"/>
-            <Button Name="StopButton" Content="Stop" Width="100" Height="41" Margin="0,0,8,0" Click = "StopButton_Click" />
-            <Label x:Name="TotalEnergyLabel" Content="Total Energy at the time: 0 Wh" Width="210" Height="34"/>
-            <Label x:Name="TotalCO2Label" Content="Total CO₂ at the time: 0 g" Width="170" Height="34"/>
-            <Button x:Name="SettingsButton" Content="Settings" Width="100" Height="41" Click="SettingsButton_Click" />
-            <Button Content="Graphs" Width="80" Click="GraphsButton_Click"/>
+        Title="Green Resource Monitor" Height="600" Width="1200"
+        Background="{StaticResource BackgroundDark}"
+        WindowStartupLocation="CenterScreen">
 
-        </StackPanel>
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-        <DataGrid x:Name="ProcessesGrid" Margin="8,48,8,8" AutoGenerateColumns="False" IsReadOnly="True">
+        <Grid Grid.Row="0" Margin="0,0,0,20">
+            <TextBlock Text="Green Resource Monitor" 
+                       Foreground="{StaticResource TextLight}" 
+                       FontSize="24" FontWeight="Bold" 
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Left"/>
+
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Right" VerticalAlignment="Center">
+                <TextBlock x:Name="TimeLabel" 
+                           Text="00:00:00" 
+                           Foreground="{StaticResource PrimaryGreen}" 
+                           FontSize="24" 
+                           FontWeight="Bold" 
+                           HorizontalAlignment="Right"/>
+
+                <TextBlock x:Name="DateLabel" 
+                           Text="Monday, 01 January 2025" 
+                           Foreground="{StaticResource TextMuted}" 
+                           FontSize="12" 
+                           HorizontalAlignment="Right"/>
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Row="1" Margin="0,0,0,20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0" Style="{StaticResource KpiCard}">
+                <StackPanel>
+                    <TextBlock Text="TOTAL ENERGY" Foreground="{StaticResource TextMuted}" FontSize="12"/>
+                    <Label x:Name="TotalEnergyLabel" Content="0.0000 Wh" 
+                           Foreground="{StaticResource PrimaryGreen}" 
+                           FontSize="20" FontWeight="Bold" Padding="0,5,0,0"/>
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Column="1" Style="{StaticResource KpiCard}">
+                <StackPanel>
+                    <TextBlock Text="TOTAL EMISSIONS" Foreground="{StaticResource TextMuted}" FontSize="12"/>
+                    <Label x:Name="TotalCO2Label" Content="0.000 g" 
+                           Foreground="#FFC107" 
+                           FontSize="20" FontWeight="Bold" Padding="0,5,0,0"/>
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Column="2" Style="{StaticResource KpiCard}" Margin="0">
+                <StackPanel>
+                    <TextBlock Text="SESSION STATUS" Foreground="{StaticResource TextMuted}" FontSize="12"/>
+                    <TextBlock Text="{Binding Status}" 
+                               Foreground="{StaticResource TextLight}" 
+                               FontSize="20" FontWeight="Bold" Padding="0,5,0,0"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <Grid Grid.Row="2" Margin="0,0,0,15">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Orientation="Horizontal" Grid.Column="0">
+                <Button x:Name="StartButton" Content="▶ Start Monitoring" 
+                        Click="StartButton_Click" 
+                        Style="{StaticResource ModernBtn}" Width="140" Margin="0,0,10,0"/>
+
+                <Button x:Name="StopButton" Content="■ Stop" 
+                        Click="StopButton_Click" 
+                        Style="{StaticResource SecondaryBtn}" Width="100"
+                        Background="{StaticResource DangerRed}"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Grid.Column="2">
+                <Button Content="📊 Graphs" Click="GraphsButton_Click" 
+                        Style="{StaticResource SecondaryBtn}"
+                        Margin="0,0,10,0"/>
+                <Button Content="⚙ Settings" 
+                        Click="SettingsButton_Click" 
+                        Style="{StaticResource SecondaryBtn}"
+                        Margin="0,0,10,0"/>
+                <Button Content="ℹ About" Click="AboutButton_Click" 
+                        Style="{StaticResource SecondaryBtn}"/>
+            </StackPanel>
+        </Grid>
+
+        <DataGrid x:Name="ProcessesGrid" Grid.Row="3"
+                  ItemsSource="{Binding Snapshots}"
+                  IsReadOnly="True"
+                  HeadersVisibility="Column"
+                  SelectionMode="Single"
+                  SelectionUnit="FullRow">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="PID" Binding="{Binding Pid}" Width="60"/>
-                <DataGridTextColumn Header="Process" Binding="{Binding ProcessName}" Width="*"/>
-                <DataGridTextColumn Header="CPU %" Binding="{Binding CpuPercent}" Width="80"/>
-                <DataGridTextColumn Header="Memory" Binding="{Binding WorkingSetReadable}" Width="120"/>
-                <DataGridTextColumn Header="Energy (Wh)" Binding="{Binding EnergyWh, StringFormat=F6}" Width="110"/>
-                <DataGridTextColumn Header="CO₂ (g)" Binding="{Binding CO2Grams, StringFormat=F3}" Width="90"/>
-                <DataGridTextColumn Header="Cost (€/Wh)" Binding="{Binding CostEUR, StringFormat=F12}" Width="120"/>
+                <DataGridTextColumn Header="Process Name" Binding="{Binding ProcessName}" Width="2*"/>
+                <DataGridTextColumn Header="CPU (%)" Binding="{Binding CpuPercent}" Width="Auto"/>
+                <DataGridTextColumn Header="Memory" Binding="{Binding WorkingSetReadable}" Width="Auto"/>
+                <DataGridTextColumn Header="Energy (Wh)" Binding="{Binding EnergyWh, StringFormat=F6}" Width="*"/>
+                <DataGridTextColumn Header="CO₂ (g)" Binding="{Binding CO2Grams, StringFormat=F4}" Width="*"/>
+                <DataGridTextColumn Header="Cost (€/Wh)" Binding="{Binding CostEUR, StringFormat=F12}" Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
+        
+        <Frame x:Name="MainFrame" 
+               Grid.Row="0" Grid.RowSpan="4" 
+               NavigationUIVisibility="Hidden" 
+               Visibility="Collapsed"/>
     </Grid>
 </Window>

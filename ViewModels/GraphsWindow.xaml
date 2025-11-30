@@ -6,26 +6,67 @@
         xmlns:local="clr-namespace:GreenResourceMonitor.ViewModels" 
         xmlns:scott="clr-namespace:ScottPlot.WPF;assembly=ScottPlot.WPF"
         mc:Ignorable="d"
-        Title="GraphsWindow" Height="450" Width="1000">
-    <Grid Margin="10">
+        Title="Data Visualization" Height="600" Width="1000"
+        Background="{StaticResource BackgroundDark}"
+        WindowStartupLocation="CenterScreen">
+
+    <Grid Margin="15">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="60*"/>
-            <RowDefinition Height="131*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-            <TextBlock Text="Process:" VerticalAlignment="Center"/>
-            <ComboBox x:Name="ProcessCombo" Width="250" Margin="10 0"
-                      SelectionChanged="ProcessCombo_SelectionChanged"/>
-            <TextBlock Text="Metric:" VerticalAlignment="Center" Margin="20,0,5,0"/>
-            <ComboBox x:Name="MetricCombo" Width="150" SelectionChanged="MetricCombo_SelectionChanged"/>
-            <DatePicker  x:Name="StartDatePicker" Margin="20,0,5,0"/>
-            <DatePicker x:Name="EndDatePicker" Margin="5,0,20,0"/>
-            <Button Content="Refresh" Width="80" Click="Refresh_Click"/>
-            <Button Content="Export" Width="80" Margin="8,0,0,0" Click="ExportButton_Click"/>
-        </StackPanel>
-        
-        <scott:WpfPlot x:Name="PlotView" Grid.Row="1" Grid.RowSpan="2"/>
+        <TextBlock Text="Historical Data Analysis" Foreground="{StaticResource TextLight}" FontSize="20" FontWeight="Bold" Margin="0,0,0,15"/>
+
+        <Border Grid.Row="1" Background="{StaticResource SurfaceDark}" CornerRadius="5" Padding="15" Margin="0,0,0,15">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Orientation="Horizontal" Grid.Column="0">
+                    <StackPanel Margin="0,0,15,0">
+                        <TextBlock Text="Process:" Foreground="{StaticResource TextMuted}" FontSize="12" Margin="0,0,0,5"/>
+                        <ComboBox x:Name="ProcessCombo" 
+                                  Width="200" Height="30"
+                                  SelectionChanged="ProcessCombo_SelectionChanged"
+                                  SelectedIndex="0"/>
+                    </StackPanel>
+
+                    <StackPanel Margin="0,0,15,0">
+                        <TextBlock Text="Metric:" Foreground="{StaticResource TextMuted}" FontSize="12" Margin="0,0,0,5"/>
+                        <ComboBox x:Name="MetricCombo" 
+                                  Width="150" Height="30" 
+                                  SelectionChanged="MetricCombo_SelectionChanged"
+                                  SelectedIndex="2"/>
+                    </StackPanel>
+
+                    <StackPanel Margin="0,0,15,0">
+                        <TextBlock Text="Start Date:" Foreground="{StaticResource TextMuted}" FontSize="12" Margin="0,0,0,5"/>
+                        <DatePicker x:Name="StartDatePicker" Width="120" Height="30"/>
+                    </StackPanel>
+
+                    <StackPanel>
+                        <TextBlock Text="End Date:" Foreground="{StaticResource TextMuted}" FontSize="12" Margin="0,0,0,5"/>
+                        <DatePicker x:Name="EndDatePicker" Width="120" Height="30"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Grid.Column="2" VerticalAlignment="Bottom">
+                    <Button Content="🔄 Refresh" Width="90" Height="30" 
+                            Click="Refresh_Click" Style="{StaticResource SecondaryBtn}" Margin="0,0,10,0"/>
+
+                    <Button Content="💾 Export" Width="90" Height="30" 
+                            Click="ExportButton_Click" Style="{StaticResource ModernBtn}"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="2" Background="White" CornerRadius="5" Padding="5">
+            <scott:WpfPlot x:Name="PlotView"/>
+        </Border>
     </Grid>
 </Window>

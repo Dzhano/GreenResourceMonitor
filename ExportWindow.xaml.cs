@@ -1,8 +1,7 @@
 ﻿using GreenResourceMonitor.Models;
-using GreenResourceMonitor.Services;
 using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Controls;
+using Microsoft.Win32;
 
 namespace GreenResourceMonitor
 {
@@ -11,21 +10,17 @@ namespace GreenResourceMonitor
 	/// </summary>
 	public partial class ExportWindow : Window
 	{
-		private readonly AppSettings appSettings;
-		private readonly SqlServerService sqliteService;
 		private readonly List<ProcessSnapshot> points;
 
-		public ExportWindow(AppSettings settings, SqlServerService service, List<ProcessSnapshot> data)
+		public ExportWindow(List<ProcessSnapshot> data)
 		{
 			InitializeComponent();
-			appSettings = settings;
-			sqliteService = service;
 			points = data;
 		}
 
 		private void CSVButton_Click(object sender, RoutedEventArgs e)
 		{
-			var sfd = new Microsoft.Win32.SaveFileDialog { FileName = "snapshots.csv", Filter = "CSV files (*.csv)|*.csv" };
+			var sfd = new SaveFileDialog { FileName = "snapshots.csv", Filter = "CSV files (*.csv)|*.csv" };
 			if (sfd.ShowDialog() != true) return;
 			using (var writer = new System.IO.StreamWriter(sfd.FileName))
 			{
@@ -41,7 +36,7 @@ namespace GreenResourceMonitor
 
 		private void ExcelButton_Click(object sender, RoutedEventArgs e)
 		{
-			var sfd = new Microsoft.Win32.SaveFileDialog { FileName = "snapshots.xlsx", Filter = "Excel files (*.xlsx)|*.xlsx" };
+			var sfd = new SaveFileDialog { FileName = "snapshots.xlsx", Filter = "Excel files (*.xlsx)|*.xlsx" };
 			if (sfd.ShowDialog() != true) return;
 
 			using (var wb = new ClosedXML.Excel.XLWorkbook()){
@@ -79,7 +74,7 @@ namespace GreenResourceMonitor
 		private void JSONButton_Click(object sender, RoutedEventArgs e)
 		{
 			// Save data as JSON
-			var sfd = new Microsoft.Win32.SaveFileDialog { FileName = "snapshots.json", Filter = "JSON files (*.json)|*.json" };
+			var sfd = new SaveFileDialog { FileName = "snapshots.json", Filter = "JSON files (*.json)|*.json" };
 			if (sfd.ShowDialog() != true) return;
 			var json = System.Text.Json.JsonSerializer.Serialize(points, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
 			System.IO.File.WriteAllText(sfd.FileName, json);

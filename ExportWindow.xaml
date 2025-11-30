@@ -1,14 +1,39 @@
 ﻿<Window x:Class="GreenResourceMonitor.ExportWindow"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:GreenResourceMonitor"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <Button x:Name="CSVButton" Content="Export to CSV" Width="100" Height="30" Margin="10" VerticalAlignment="Top" HorizontalAlignment="Left" Click="CSVButton_Click"/>
-        <Button x:Name="ExcelButton" Content="Export to Excel" Width="100" Height="30" Margin="120,10,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Click="ExcelButton_Click"/>
-        <Button x:Name="JSONButton" Content="Export to JSON" Width="100" Height="30" Margin="230,10,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Click="JSONButton_Click"/>
-    </Grid>
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GreenResourceMonitor"
+        mc:Ignorable="d"
+        Title="Export Data" Height="300" Width="400"
+        Background="{StaticResource BackgroundDark}"
+        ResizeMode="NoResize">
+
+    <Border Padding="20">
+        <StackPanel VerticalAlignment="Center">
+            <TextBlock Text="Export Data" 
+                       Foreground="{StaticResource TextLight}" 
+                       FontSize="20" FontWeight="Bold" 
+                       HorizontalAlignment="Center" Margin="0,0,0,10"/>
+
+            <TextBlock Text="Choose your preferred format:" 
+                       Foreground="{StaticResource TextMuted}" 
+                       HorizontalAlignment="Center" Margin="0,0,0,20"/>
+
+            <Button Content="📄 Export as CSV" 
+                    Click="CSVButton_Click" 
+                    Style="{StaticResource ModernBtn}" 
+                    Height="40" Margin="0,0,0,10"/>
+
+            <Button Content="📊 Export as Excel" 
+                    Click="ExcelButton_Click" 
+                    Style="{StaticResource SecondaryBtn}" 
+                    Height="40" Margin="0,0,0,10"/>
+
+            <Button Content="｛ ｝ Export as JSON" 
+                    Click="JSONButton_Click" 
+                    Style="{StaticResource SecondaryBtn}" 
+                    Height="40"/>
+        </StackPanel>
+    </Border>
 </Window>

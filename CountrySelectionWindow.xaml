@@ -4,33 +4,44 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Select Region" Height="350" Width="500" WindowStartupLocation="CenterOwner">
-    <Grid Margin="10">
+        Title="Select Region" Height="400" Width="550"
+        Background="{StaticResource BackgroundDark}"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize">
+
+    <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Text="Select a country to fetch current energy data:" FontSize="14" FontWeight="Bold" Margin="0,0,0,10"/>
+        <StackPanel Grid.Row="0" Margin="0,0,0,15">
+            <TextBlock Text="Select Region" Foreground="{StaticResource TextLight}" FontSize="18" FontWeight="Bold"/>
+            <TextBlock Text="Select a country to fetch real-time energy data." Foreground="{StaticResource TextMuted}" FontSize="12"/>
+        </StackPanel>
 
-        <!-- Country Buttons Grid -->
         <UniformGrid Grid.Row="1" Columns="3" Rows="3">
-            <Button Content="Bulgaria (BG)" Tag="BG" Click="CountryButton_Click" Margin="5"/>
-            <Button Content="USA (US)" Tag="US" Click="CountryButton_Click" Margin="5"/>
-            <Button Content="Germany (DE)" Tag="DE" Click="CountryButton_Click" Margin="5"/>
-            <Button Content="France (FR)" Tag="FR" Click="CountryButton_Click" Margin="5"/>
-            <Button Content="UK (GB)" Tag="GB" Click="CountryButton_Click" Margin="5"/>
-            <Button Content="Italy (IT)" Tag="IT" Click="CountryButton_Click" Margin="5"/>
-            <Button Content="Spain (ES)" Tag="ES" Click="CountryButton_Click" Margin="5"/>
-            <Button Content="China (CN)" Tag="CN" Click="CountryButton_Click" Margin="5"/>
-            <Button Content="Japan (JP)" Tag="JP" Click="CountryButton_Click" Margin="5"/>
+            <Button Content="🇧🇬 Bulgaria" Tag="BG" Click="CountryButton_Click" Style="{StaticResource SecondaryBtn}" Margin="5"/>
+            <Button Content="🇺🇸 USA" Tag="US" Click="CountryButton_Click" Style="{StaticResource SecondaryBtn}" Margin="5"/>
+            <Button Content="🇩🇪 Germany" Tag="DE" Click="CountryButton_Click" Style="{StaticResource SecondaryBtn}" Margin="5"/>
+            <Button Content="🇫🇷 France" Tag="FR" Click="CountryButton_Click" Style="{StaticResource SecondaryBtn}" Margin="5"/>
+            <Button Content="🇬🇧 UK" Tag="GB" Click="CountryButton_Click" Style="{StaticResource SecondaryBtn}" Margin="5"/>
+            <Button Content="🇮🇹 Italy" Tag="IT" Click="CountryButton_Click" Style="{StaticResource SecondaryBtn}" Margin="5"/>
+            <Button Content="🇪🇸 Spain" Tag="ES" Click="CountryButton_Click" Style="{StaticResource SecondaryBtn}" Margin="5"/>
+            <Button Content="🇨🇳 China" Tag="CN" Click="CountryButton_Click" Style="{StaticResource SecondaryBtn}" Margin="5"/>
+            <Button Content="🇯🇵 Japan" Tag="JP" Click="CountryButton_Click" Style="{StaticResource SecondaryBtn}" Margin="5"/>
         </UniformGrid>
 
-        <!-- Status & Cancel -->
-        <StackPanel Grid.Row="2" Orientation="Vertical" Margin="0,10,0,0">
-            <TextBlock x:Name="StatusText" Text="Ready." Foreground="Gray" HorizontalAlignment="Center" Margin="0,0,0,5"/>
-            <Button Content="Cancel" Width="100" Click="Cancel_Click" HorizontalAlignment="Right"/>
-        </StackPanel>
+        <Grid Grid.Row="2" Margin="0,20,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock x:Name="StatusText" Text="Ready" Foreground="{StaticResource PrimaryGreen}" VerticalAlignment="Center" FontStyle="Italic"/>
+
+            <Button Content="Cancel" Click="Cancel_Click" Style="{StaticResource SecondaryBtn}" Grid.Column="1" Width="100"/>
+        </Grid>
     </Grid>
 </Window>

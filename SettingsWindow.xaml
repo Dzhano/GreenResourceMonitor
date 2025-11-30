@@ -5,32 +5,110 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GreenResourceMonitor"
         mc:Ignorable="d"
-        Title="Settings" Height="450" Width="800">
-    <Grid>
-        <TextBlock HorizontalAlignment="Left" Margin="191,63,0,0" TextWrapping="Wrap" Text="Electricity Price (EUR/kWh):" VerticalAlignment="Top"/>
-        <TextBox x:Name="PriceBox" HorizontalAlignment="Left" Margin="400,61,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120"/>
+        Title="Settings" Height="550" Width="600"
+        Background="{StaticResource BackgroundDark}">
 
-        <TextBlock HorizontalAlignment="Left" Margin="191,111,0,0" TextWrapping="Wrap" Text="CO₂ Intensity (g/kWh):" VerticalAlignment="Top"/>
-        <TextBox x:Name="CO2Box" HorizontalAlignment="Left" Margin="400,109,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120"/>
+    <Grid Margin="20">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
-        <TextBlock HorizontalAlignment="Left" Margin="191,171,0,0" TextWrapping="Wrap" Text="Sampling Interval (s):" VerticalAlignment="Top"/>
-        <TextBox x:Name="IntervalBox" HorizontalAlignment="Left" Margin="400,169,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
 
-        <TextBlock HorizontalAlignment="Left" Margin="191,219,0,0" TextWrapping="Wrap" Text="Calibration Factor:" VerticalAlignment="Top"/>
-        <TextBox x:Name="CalibBox" HorizontalAlignment="Left" Margin="400,217,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120"/>
+        <TextBlock Text="Electricity Price (EUR/kWh):" 
+                   Foreground="{StaticResource TextLight}" VerticalAlignment="Center" 
+                   Margin="0,0,10,15" Grid.Row="0" Grid.Column="0"/>
+        <TextBox x:Name="PriceBox"
+                 Grid.Row="0" Grid.Column="1"
+                 Height="25" Margin="0,0,0,15"/>
 
-        <Button Content="Save" HorizontalAlignment="Center" Margin="0,336,0,0" VerticalAlignment="Top" Width="80" Click="Save_Click"/>
-        <Button Content="Cancel" HorizontalAlignment="Left" Margin="479,336,0,0" VerticalAlignment="Top" Width="80" Click="Cancel_Click"/>
-        
-        <Button x:Name="MigrateCsvToDbButton" Content="Migrate CSV to Database" HorizontalAlignment="Left" Margin="392,269,0,0" VerticalAlignment="Top" Width="170" Click="MigrateCsvToDbButton_Click"/>
-        <Button x:Name="DeleteCsvDataButton" Content="Delete CSV Database" HorizontalAlignment="Left" Margin="178,269,0,0" VerticalAlignment="Top" Width="170" Click="DeleteCsvDataButton_Click"/>
-        <Button x:Name="DeleteSqlDataButton" Content="Delete SQL Database" HorizontalAlignment="Left" Margin="178,306,0,0" VerticalAlignment="Top" Width="170" Click="DeleteSqlDataButton_Click"/>
-        
-        <Button x:Name="CountryButton" Content="Select Country" HorizontalAlignment="Left" Margin="540,61,0,0" VerticalAlignment="Top" Width="140" Height="22" Click="CountryButton_Click"/>
-        <ComboBox x:Name="StorageModeCombo" Margin="540,109,119,270">
+        <TextBlock Text="CO₂ Intensity (g/kWh):" 
+                   Foreground="{StaticResource TextLight}" 
+                   VerticalAlignment="Center" Margin="0,0,10,15" 
+                   Grid.Row="1" Grid.Column="0"/>
+        <TextBox x:Name="CO2Box"
+                 Grid.Row="1" Grid.Column="1" 
+                 Height="25" Margin="0,0,0,15"/>
+
+        <TextBlock Text="Sampling Interval (s):" 
+                   Foreground="{StaticResource TextLight}" 
+                   VerticalAlignment="Center" Margin="0,0,10,15" 
+                   Grid.Row="2" Grid.Column="0"/>
+        <TextBox x:Name="IntervalBox" 
+                 Grid.Row="2" Grid.Column="1" 
+                 Height="25" Margin="0,0,0,15"/>
+
+        <TextBlock Text="Calibration Factor:" 
+                   Foreground="{StaticResource TextLight}" 
+                   VerticalAlignment="Center" Margin="0,0,10,15" 
+                   Grid.Row="3" Grid.Column="0"/>
+        <TextBox x:Name="CalibBox" 
+                 Grid.Row="3" Grid.Column="1" 
+                 Height="25" Margin="0,0,0,15"/>
+
+        <TextBlock Text="Storage Mode:" 
+                   Foreground="{StaticResource TextLight}" 
+                   VerticalAlignment="Center" Margin="0,0,10,15" 
+                   Grid.Row="4" Grid.Column="0"/>
+        <ComboBox x:Name="StorageModeCombo" 
+                  Grid.Row="4" Grid.Column="1" 
+                  Height="25" Margin="0,0,0,15">
             <ComboBoxItem Content="CSV only" Tag="CSVOnly" />
-            <ComboBoxItem Content="SQLite only" Tag="SQLiteOnly" />
+            <ComboBoxItem Content="SQL Server only" Tag="SQLOnly" />
             <ComboBoxItem Content="Both" Tag="Both" />
         </ComboBox>
+
+        <TextBlock Text="Load Region Data:" 
+                   Foreground="{StaticResource TextLight}" 
+                   VerticalAlignment="Center" Margin="0,0,10,15" 
+                   Grid.Row="5" Grid.Column="0"/>
+        <Button Content="Select Country..." 
+                Click="CountryButton_Click" Style="{StaticResource SecondaryBtn}" 
+                Grid.Row="5" Grid.Column="1" 
+                HorizontalAlignment="Left"
+                Width="150" Margin="0,0,0,15"/>
+
+        <Border Grid.Row="6" Grid.ColumnSpan="2" Height="1" Background="#444" Margin="0,10,0,20"/>
+
+        <TextBlock Text="Data Management:"
+                   Foreground="{StaticResource TextLight}" 
+                   FontWeight="Bold" Margin="0,0,0,10" 
+                   Grid.Row="7" Grid.Column="0"/>
+        <StackPanel Grid.Row="7" Grid.Column="1" Orientation="Vertical">
+            <Button Content="Migrate CSV to Database" 
+                    Click="MigrateCsvToDbButton_Click" 
+                    Style="{StaticResource SecondaryBtn}"
+                    Margin="0,0,0,10" HorizontalAlignment="Stretch"/>
+            <Button Content="Clear CSV Data" 
+                    Click="DeleteCsvDataButton_Click"
+                    Style="{StaticResource SecondaryBtn}" 
+                    Background="{StaticResource DangerRed}"
+                    Margin="0,0,0,10" HorizontalAlignment="Stretch"/>
+            <Button Content="Clear SQL Database" 
+                    Click="DeleteSqlDataButton_Click" 
+                    Style="{StaticResource SecondaryBtn}" Background="{StaticResource DangerRed}" 
+                    Margin="0,0,0,10" HorizontalAlignment="Stretch"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="9" Grid.ColumnSpan="2" 
+                    Orientation="Horizontal" HorizontalAlignment="Right" 
+                    Margin="0,20,0,0">
+            <Button Content="Save Settings" Click="Save_Click" 
+                    Style="{StaticResource ModernBtn}" Width="120" Margin="0,0,10,0"/>
+            <Button Content="Cancel" Click="Cancel_Click" 
+                    Style="{StaticResource SecondaryBtn}" Width="80"/>
+        </StackPanel>
     </Grid>
 </Window>

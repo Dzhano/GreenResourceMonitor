@@ -83,7 +83,7 @@ namespace GreenResourceMonitor.Services
 			cts = null;
 
 			// Flush any remaining SQL buffer
-			if (appSettings.StorageMode == StorageMode.SQLiteOnly || appSettings.StorageMode == StorageMode.Both)
+			if (appSettings.StorageMode == StorageMode.SQLOnly || appSettings.StorageMode == StorageMode.Both)
 			{
 				lock (sqlBuffer)
 				{
@@ -93,10 +93,8 @@ namespace GreenResourceMonitor.Services
 						sqlBuffer.Clear();
 						try
 						{
-							foreach (var snapshot in toInsert)
-							{
-								sqlService.InsertSnapshot(snapshot);
-							}
+							sqlService.InsertSnapshots(toInsert);
+							// After adding the functionality to batch insert, this should be efficient enough.
 						}
 						catch (Exception ex)
 						{
@@ -109,7 +107,7 @@ namespace GreenResourceMonitor.Services
 
 		private void SampleAndEmit()
 		{
-			DateTime now = DateTime.UtcNow;
+			DateTime now = DateTime.UtcNow.ToLocalTime();
 			var processes = Process.GetProcesses();
 			var result = new List<ProcessSnapshot>(processes.Length);
 
@@ -157,7 +155,7 @@ namespace GreenResourceMonitor.Services
 							File.AppendAllLines(csvPath, new[] { csvLine }, Encoding.UTF8);
 						}
 					}
-					if (appSettings.StorageMode == StorageMode.SQLiteOnly || appSettings.StorageMode == StorageMode.Both)
+					if (appSettings.StorageMode == StorageMode.SQLOnly || appSettings.StorageMode == StorageMode.Both)
 					{
 						lock (sqlBuffer)
 						{
@@ -167,12 +165,15 @@ namespace GreenResourceMonitor.Services
 								// copy and clear buffer quickly, then insert in background
 								var toInsert = new List<ProcessSnapshot>(sqlBuffer);
 								sqlBuffer.Clear();
+								// Rather than inserting the whole batch here, we offload it to a background task.
+								// This prevents blocking the main sampling loop, ensuring consistent timing.
+								
 								// fire-and-forget background insert (don't block UI/timer)
-								_ = Task.Run(() =>
+								Task.Run(() =>
 								{
 									try
 									{
-										sqlService.InsertSnapshot(snapshot);
+										sqlService.InsertSnapshots(toInsert);
 									}
 									catch (Exception ex)
 									{

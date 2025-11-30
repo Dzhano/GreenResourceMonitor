@@ -14,13 +14,13 @@ namespace GreenResourceMonitor.Models
 		public double CalibrationFactor { get; set; } = 1.0; // Default calibration factor to adjust energy estimates for accuracy
 
 		public StorageMode StorageMode { get; set; } = StorageMode.CSVOnly; // Default storage mode
-		public string SQLPath { get; set; } = ""; // Default SQLite database path if empty, SQLite storage is disabled
+		public string SQLPath { get; set; } = ""; // Default SQL Server path if empty, SQL Server storage is disabled
 	}
 
 	public enum StorageMode
 	{
 		CSVOnly = 0,
-		SQLiteOnly = 1,
+		SQLOnly = 1,
 		Both = 2
 	}
 }

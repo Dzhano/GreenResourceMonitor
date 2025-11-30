@@ -101,7 +101,8 @@ namespace GreenResourceMonitor.Services
 		{
 			using (SqlConnection connection = new SqlConnection(databaseConnectionString))
 			{
-				connection.Open();
+				// We could have used InsertSnapshot in a loop, but to improve performance we reuse the same connection and transaction.
+				connection.Open(); // To not open multiple times connections for each snapshot we have to recreate the code above.
 				using (SqlTransaction transaction = connection.BeginTransaction())
 				{
 					foreach (ProcessSnapshot snapshot in snapshots)

@@ -40,7 +40,7 @@ namespace GreenResourceMonitor
 			{
 				switch (appSettings.StorageMode)
 				{
-					case StorageMode.SQLiteOnly:
+					case StorageMode.SQLOnly:
 						StorageModeCombo.SelectedIndex = 1;
 						break;
 					case StorageMode.Both:
@@ -71,8 +71,8 @@ namespace GreenResourceMonitor
 				{
 					switch (tag)
 					{
-						case "SQLiteOnly":
-							appSettings.StorageMode = StorageMode.SQLiteOnly;
+						case "SQLOnly":
+							appSettings.StorageMode = StorageMode.SQLOnly;
 							break;
 						case "Both":
 							appSettings.StorageMode = StorageMode.Both;
