@@ -85,7 +85,7 @@
             <StackPanel Orientation="Horizontal" Grid.Column="0">
                 <Button x:Name="StartButton" Content="▶ Start Monitoring" 
                         Click="StartButton_Click" 
-                        Style="{StaticResource ModernBtn}" Width="140" Margin="0,0,10,0"/>
+                        Style="{StaticResource ModernBtn}" Width="145" Margin="0,0,10,0"/>
 
                 <Button x:Name="StopButton" Content="■ Stop" 
                         Click="StopButton_Click" 

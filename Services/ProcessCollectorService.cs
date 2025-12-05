@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace GreenResourceMonitor.Services
 {
-	internal class ProcessCollectorService : IProcessCollector
+	public class ProcessCollectorService : IProcessCollector
 	{
 		private readonly TimeSpan interval;
 		private readonly Dictionary<int, TimeSpan> lastCpuTimes = new Dictionary<int, TimeSpan>();
@@ -126,10 +126,10 @@ namespace GreenResourceMonitor.Services
 					var cpuPercent = (interval.TotalMilliseconds > 0) ? (deltaMs / interval.TotalMilliseconds) / _logicalProcessors * 100.0 : 0.0; // CPU usage percentage
 					lastCpuTimes[pID] = cpuTime; // Update last recorded CPU time
 
-					const double cpuTDPWatts = 15.0; // Average TDP for a CPU core in Watts (assumed)
+					double cpuTDPWatts = appSettings.CpuTDPWatts; // Average TDP for a CPU core in Watts
 					double intervalSeconds = interval.TotalSeconds; // Actual interval in seconds
 					double co2PerWh = appSettings.Co2PerWh; // Average CO2 emissions per Wh in grams in Bulgaria = 0.475 kg or 475 grams
-					double costPerKWhEUR_BG = appSettings.CostPerKWhEUR; // Average cost of electricity per kWh in Bulgaria = 0.13 EUR or 13 cents
+					double costPerKWhEUR = appSettings.CostPerKWhEUR; // Average cost of electricity per kWh in Bulgaria = 0.13 EUR or 13 cents
 					double energyWh = (cpuPercent / 100.0) * cpuTDPWatts * (intervalSeconds / 3600.0); // Energy in Watt-hours
 					double calibrationFactor = appSettings.CalibrationFactor; // Calibration factor to adjust energy estimates
 
@@ -141,9 +141,9 @@ namespace GreenResourceMonitor.Services
 						ProcessName = pName,
 						CpuPercent = Math.Round(cpuPercent, 3),
 						WorkingSetBytes = process.WorkingSet64,
-						EnergyWh = Math.Round(energyWh, 6), // Energy in Watt-hours
-						CO2Grams = Math.Round(energyWh * co2PerWh, 6), // CO2 emissions in grams
-						CostEUR = Math.Round(energyWh * (costPerKWhEUR_BG / 1000.0) * calibrationFactor, 12) // Cost in EUR
+						EnergyWh = Math.Round(energyWh * calibrationFactor, 6), // Energy in Watt-hours
+						CO2Grams = Math.Round(energyWh * calibrationFactor * co2PerWh, 6), // CO2 emissions in grams
+						CostEUR = Math.Round(energyWh * (costPerKWhEUR / 1000.0) * calibrationFactor, 12) // Cost in EUR
 					};
 					result.Add(snapshot);
 

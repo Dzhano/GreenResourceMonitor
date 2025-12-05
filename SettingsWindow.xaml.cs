@@ -35,6 +35,7 @@ namespace GreenResourceMonitor
 			CO2Box.Text = appSettings.Co2PerWh.ToString();
 			IntervalBox.Text = appSettings.SamplingSeconds.ToString();
 			CalibBox.Text = appSettings.CalibrationFactor.ToString();
+			TDPBox.Text = appSettings.CpuTDPWatts.ToString();
 			
 			try
 			{
@@ -99,6 +100,7 @@ namespace GreenResourceMonitor
 				appSettings.Co2PerWh = double.Parse(CO2Box.Text);
 				appSettings.SamplingSeconds = int.Parse(IntervalBox.Text);
 				appSettings.CalibrationFactor = double.Parse(CalibBox.Text);
+				appSettings.CpuTDPWatts = double.Parse(TDPBox.Text);
 
 				service.Save(appSettings);
 				DialogResult = true;
