@@ -360,7 +360,6 @@ namespace GreenResourceMonitor
 			catch (Exception)
 			{
 				MessageBox.Show("No data is found for exporting. Null object returned.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-				throw;
 			}
 		}
 	}
